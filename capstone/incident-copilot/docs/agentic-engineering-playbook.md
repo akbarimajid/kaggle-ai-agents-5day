@@ -2,18 +2,19 @@
 
 Status: Active
 Scope: AI Platform Incident Copilot capstone
-Source: Day 1 learning, The New SDLC With Vibe Coding, and capstone implementation experience
+Source: Day 1 learning, The New SDLC With Vibe Coding, and capstone implementation
+experience
 
 ## Purpose
 
-This document defines how the AI Platform Incident Copilot applies the Day 1 lessons from
-vibe coding, structured AI-assisted coding, and agentic engineering.
+This document defines how the AI Platform Incident Copilot applies the Day 1 lessons
+from vibe coding, structured AI-assisted coding, and agentic engineering.
 
 The capstone uses vibe coding as the development workflow, but the system itself is an
 agentic engineering project.
 
-That means the goal is not only to generate code quickly. The goal is to build a reliable,
-testable, reviewable, and extensible agent system for AI platform operations.
+That means the goal is not only to generate code quickly. The goal is to build a
+reliable, testable, reviewable, and extensible agent system for AI platform operations.
 
 ## Core lesson
 
@@ -29,20 +30,20 @@ The scarce skills are:
 * review discipline
 * safe iteration
 
-For this capstone, every agentic feature must be designed around contracts, tests, evals,
-and human review before it is treated as reliable.
+For this capstone, every agentic feature must be designed around contracts, tests,
+evals, and human review before it is treated as reliable.
 
 ## Vibe coding vs agentic engineering in this project
 
-| Dimension | Vibe coding behavior | Agentic engineering behavior in this capstone |
+| Dimension | Vibe coding behavior | Agentic engineering behavior |
 | --- | --- | --- |
-| Intent | Casual prompt to generate code | Explicit task prompt with scope, constraints, commands, and review gates |
-| Verification | "Looks good" manual check | Unit tests, eval score, output contract validation, hygiene checks |
-| Code ownership | AI writes, developer skims | Developer owns architecture, scope, merge decision, and quality bar |
-| Context | Chat history only | Versioned docs, output contracts, mock data, tool contracts, README notes |
-| Error handling | Paste error back to AI | Diagnose root cause, constrain fix scope, re-run tests and evals |
-| Scope | Fast prototype | Production-style learning artifact with public repo quality |
-| Risk | Hidden breakage accepted | Generated files, secrets, Unicode issues, dependencies, and drift are blocked |
+| Intent | Casual prompt to generate code | Explicit task prompt with scope and review gates |
+| Verification | "Looks good" manual check | Unit tests, eval score, contract validation |
+| Code ownership | AI writes, developer skims | Developer owns architecture and merge decision |
+| Context | Chat history only | Versioned docs, contracts, mock data, README notes |
+| Error handling | Paste error back to AI | Diagnose root cause, constrain fix, re-run tests |
+| Scope | Fast prototype | Production-style learning artifact with public quality |
+| Risk | Hidden breakage accepted | Generated files, secrets, Unicode, and drift blocked |
 
 ## Capstone operating principle
 
@@ -94,7 +95,8 @@ runtime from mock incident data and tools.
 
 ### 2. Factory model
 
-The developer does not only produce code. The developer designs the factory that produces code.
+The developer does not only produce code. The developer designs the factory that
+produces code.
 
 In this project:
 
@@ -131,8 +133,8 @@ Orchestrator mode:
 
 Design rule:
 
-Use conductor mode for narrow fixes. Use orchestrator mode for PR-level work with explicit
-acceptance criteria.
+Use conductor mode for narrow fixes. Use orchestrator mode for PR-level work with
+explicit acceptance criteria.
 
 ### 4. Harness anatomy
 
@@ -152,7 +154,8 @@ For this capstone, the harness includes:
 
 Design rule:
 
-Do not treat the LLM as reliable by default. Reliability comes from the harness around it.
+Do not treat the LLM as reliable by default. Reliability comes from the harness around
+it.
 
 ## Non-negotiable engineering guardrails
 
@@ -167,7 +170,7 @@ The capstone must preserve these rules:
 7. ADK and LLM execution must be optional until the offline harness is stable.
 8. Public repo readability matters.
 9. Every PR must explain scope, validation, eval score, and safety checks.
-10. Future agent work must keep the same output contract unless the contract is deliberately versioned.
+10. Future agent work must keep the same output contract unless deliberately versioned.
 
 ## How this applies to the next implementation stages
 
@@ -232,8 +235,8 @@ Status: Future
 
 Goal:
 
-Allow the coordinator and specialists to perform live LLM-backed reasoning behind the same
-output contract.
+Allow the coordinator and specialists to perform live LLM-backed reasoning behind the
+same output contract.
 
 Required before implementation:
 
@@ -246,8 +249,8 @@ Required before implementation:
 
 Engineering lesson:
 
-Live LLM behavior must be introduced behind a tested boundary, not mixed directly into the
-baseline.
+Live LLM behavior must be introduced behind a tested boundary, not mixed directly into
+the baseline.
 
 ### Stage 5: Critic/refiner loop
 
@@ -283,7 +286,8 @@ A PR is not merge-ready until it answers:
 7. Are generated files excluded?
 8. Are runtime artifacts excluded?
 9. Is the scope limited to the stated task?
-10. Does this improve the portfolio story for AI platform, MLOps, DevOps/SRE, or GenAI roles?
+10. Does this improve the portfolio story for AI platform, MLOps, DevOps/SRE, or GenAI
+    roles?
 
 ## Career positioning
 
@@ -306,5 +310,5 @@ The project demonstrates:
 
 The key message:
 
-I used vibe coding techniques to accelerate development, but I applied agentic engineering
-discipline to make the result testable, reviewable, and portfolio-grade.
+I used vibe coding techniques to accelerate development, but I applied agentic
+engineering discipline to make the result testable, reviewable, and portfolio-grade.
