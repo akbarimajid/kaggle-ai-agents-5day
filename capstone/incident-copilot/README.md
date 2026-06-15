@@ -117,7 +117,7 @@ capstone/incident-copilot/
 |-- AGENTS.md
 |-- requirements-adk.txt
 |-- app/
-|   `-- incident_copilot/
+|   +-- incident_copilot/
 |-- tests/
 |-- data/
 |   |-- incidents/
@@ -125,16 +125,16 @@ capstone/incident-copilot/
 |   |-- metrics/
 |   |-- k8s/
 |   |-- airflow/
-|   `-- runbooks/
+|   +-- runbooks/
 |-- docs/
 |   |-- architecture.md
 |   |-- scenarios.md
 |   |-- tool-contracts.md
 |   |-- agent-design.md
-|   `-- agentic-engineering-playbook.md
-`-- evals/
+|   +-- agentic-engineering-playbook.md
++-- evals/
     |-- golden-answers.json
-    `-- example-predictions.json
+    +-- example-predictions.json
 ```
 
 ## Local validation
