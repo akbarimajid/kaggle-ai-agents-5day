@@ -1,14 +1,23 @@
 # AI Platform Incident Copilot
 
-**One-line pitch:** A multi-agent copilot that investigates platform incidents, cites evidence from mock telemetry, and recommends safe next steps with an auditable incident summary.
+**One-line pitch:** A multi-agent copilot that investigates platform incidents, cites
+evidence from mock telemetry, and recommends safe next steps with an auditable incident
+summary.
 
 ## Problem statement
 
-Platform engineers investigating Airflow, Kubernetes, and data-pipeline incidents must correlate signals across logs, metrics, deployment history, and runbooks under time pressure. Manual triage is slow, error-prone, and often skips evidence citation. This capstone explores whether a **specialist multi-agent system** can produce **evidence-backed diagnoses** and **safe remediation guidance** without connecting to real production systems in v0.
+Platform engineers investigating Airflow, Kubernetes, and data-pipeline incidents must
+correlate signals across logs, metrics, deployment history, and runbooks under time
+pressure. Manual triage is slow, error-prone, and often skips evidence citation.
+
+This capstone explores whether a **specialist multi-agent system** can produce
+**evidence-backed diagnoses** and **safe remediation guidance** without connecting to
+real production systems in v0.
 
 ## Target user
 
-Platform engineer / SRE / MLOps engineer on-call for data orchestration and batch workloads.
+Platform engineer / SRE / MLOps engineer on-call for data orchestration and batch
+workloads.
 
 ## v0 scope
 
@@ -32,12 +41,13 @@ Platform engineer / SRE / MLOps engineer on-call for data orchestration and batc
 ## Day 1b architecture mapping
 
 | Pattern | Role in this capstone |
-|---------|----------------------|
-| **LLM orchestrator** (primary) | `IncidentCoordinatorAgent` dynamically selects specialist investigators based on symptoms |
-| **Sequential** (supporting) | Fixed final pipeline: evidence -> diagnosis -> safe remediation -> incident summary |
-| **Loop** (future) | `SafetyCriticAgent` + refiner to improve diagnosis until approved or `max_iterations` - not implemented in v0 |
+| --- | --- |
+| **LLM orchestrator** (primary) | `IncidentCoordinatorAgent` selects specialists from symptoms |
+| **Sequential** (supporting) | Fixed pipeline: evidence -> diagnosis -> remediation -> summary |
+| **Loop** (future) | `SafetyCriticAgent` + refiner until approved or `max_iterations` |
 
-See [notes/day-1b-agent-architectures.md](../../notes/day-1b-agent-architectures.md) for course context.
+See [notes/day-1b-agent-architectures.md](../../notes/day-1b-agent-architectures.md)
+for course context.
 
 ## Agent architecture summary
 
@@ -54,10 +64,14 @@ User incident report
 
 Specialist agents are conceptually exposed like `AgentTool` wrappers. State handoff uses keys such as `evidence_bundle`, `diagnosis_draft`, `remediation_plan`, `incident_summary`.
 
+## Related docs
+
+* [Agentic engineering playbook](docs/agentic-engineering-playbook.md)
+
 ## Mock system layers
 
 | Layer | v0 representation |
-|-------|-------------------|
+| --- | --- |
 | Airflow | `data/airflow/INC-*.json` |
 | Kubernetes | `data/k8s/INC-*-events.yaml` |
 | Logs | `data/logs/INC-*.log` |
@@ -69,11 +83,13 @@ Specialist agents are conceptually exposed like `AgentTool` wrappers. State hand
 ## Evaluation approach
 
 * Three golden scenarios with known root causes
-* `evals/golden-answers.json` defines required evidence, safe/unsafe actions, expected specialists, confidence ranges, clarifying questions, rollback guidance, and summary points
+* `evals/golden-answers.json` defines required evidence, safe/unsafe actions,
+  expected specialists, confidence ranges, clarifying questions, rollback guidance,
+  and summary points
 * **Output contract** (per incident response):
 
   | Field | Description |
-  |-------|-------------|
+  | --- | --- |
   | `root_cause` | Likely root cause with evidence backing |
   | `confidence` | Calibrated score (0.0-1.0) |
   | `evidence` | Citations from logs, metrics, k8s, airflow, deployments |
@@ -85,7 +101,7 @@ Specialist agents are conceptually exposed like `AgentTool` wrappers. State hand
 * Score dimensions (18 points per incident, 54 total across three scenarios):
 
   | Dimension | Max |
-  |-----------|-----|
+  | --- | --- |
   | root_cause_correct | 3 |
   | evidence_quality | 3 |
   | action_safety | 3 |
@@ -113,7 +129,7 @@ capstone/incident-copilot/
 |-- AGENTS.md
 |-- requirements-adk.txt
 |-- app/
-|   `-- incident_copilot/
+|   +-- incident_copilot/
 |-- tests/
 |-- data/
 |   |-- incidents/
@@ -121,15 +137,16 @@ capstone/incident-copilot/
 |   |-- metrics/
 |   |-- k8s/
 |   |-- airflow/
-|   `-- runbooks/
+|   +-- runbooks/
 |-- docs/
 |   |-- architecture.md
 |   |-- scenarios.md
 |   |-- tool-contracts.md
-|   `-- agent-design.md
-`-- evals/
+|   |-- agent-design.md
+|   +-- agentic-engineering-playbook.md
++-- evals/
     |-- golden-answers.json
-    `-- example-predictions.json
+    +-- example-predictions.json
 ```
 
 ## Local validation
@@ -139,8 +156,10 @@ From `capstone/incident-copilot`:
 ```bash
 cd capstone/incident-copilot
 PYTHONPATH=app python -m unittest discover -s tests
-PYTHONPATH=app python -m incident_copilot.manual_investigator --all --output evals/manual-investigator-predictions.json
-PYTHONPATH=app python -m incident_copilot.eval_runner --predictions evals/manual-investigator-predictions.json
+PYTHONPATH=app python -m incident_copilot.manual_investigator --all \
+  --output evals/manual-investigator-predictions.json
+PYTHONPATH=app python -m incident_copilot.eval_runner \
+  --predictions evals/manual-investigator-predictions.json
 PYTHONPATH=app python -m incident_copilot.adk_coordinator --topology
 PYTHONPATH=app python -m incident_copilot.adk_coordinator --incident-id INC-001
 ```
@@ -149,7 +168,8 @@ Single-incident investigation:
 
 ```bash
 PYTHONPATH=app python -m incident_copilot.manual_investigator --incident-id INC-001
-PYTHONPATH=app python -m incident_copilot.manual_investigator --incident-id INC-001 --output /tmp/inc-001-prediction.json
+PYTHONPATH=app python -m incident_copilot.manual_investigator --incident-id INC-001 \
+  --output /tmp/inc-001-prediction.json
 ```
 
 Stdlib only. No extra dependencies required for deterministic validation.
@@ -157,16 +177,20 @@ Stdlib only. No extra dependencies required for deterministic validation.
 ## Capstone progression
 
 | PR | Focus |
-|----|-------|
+| --- | --- |
 | #1 | Mock data, tool contracts, eval harness, architecture docs |
 | #2 | Deterministic end-to-end manual investigator (quality gate) |
 | #3 | ADK coordinator and specialist agent topology boundary |
 
-PR #3 adds the Day 1b multi-agent architecture layer beside the deterministic baseline. It defines the agentic boundary only. It does not add production deployment or live LLM execution. The manual investigator remains the acceptance gate (54 / 54).
+PR #3 adds the Day 1b multi-agent architecture layer beside the deterministic baseline.
+It defines the agentic boundary only. It does not add production deployment or live LLM
+execution. The manual investigator remains the acceptance gate (54 / 54).
 
 ## ADK layer (optional)
 
-The ADK coordinator lives in `adk_agents.py` and `adk_coordinator.py`. It defines specialist investigators, the `IncidentCoordinatorAgent` orchestrator, and the sequential `SummarySafetyAgent` reporting stage.
+The ADK coordinator lives in `adk_agents.py` and `adk_coordinator.py`. It defines
+specialist investigators, the `IncidentCoordinatorAgent` orchestrator, and the sequential
+`SummarySafetyAgent` reporting stage.
 
 Offline by default:
 
@@ -176,7 +200,8 @@ PYTHONPATH=app python -m incident_copilot.adk_coordinator --topology
 PYTHONPATH=app python -m incident_copilot.adk_coordinator --incident-id INC-001
 ```
 
-`run_adk_incident_analysis()` defaults to `execution_mode=deterministic`, which delegates to `manual_investigator` without calling a live model.
+`run_adk_incident_analysis()` defaults to `execution_mode=deterministic`, which delegates
+to `manual_investigator` without calling a live model.
 
 Optional ADK install (not required for tests):
 
@@ -184,7 +209,8 @@ Optional ADK install (not required for tests):
 pip install -r requirements-adk.txt
 ```
 
-When `google-adk` is installed, `build_incident_coordinator(materialize_adk=True)` can build ADK Agent objects for future live execution. Tests still pass without API keys.
+When `google-adk` is installed, `build_incident_coordinator(materialize_adk=True)` can
+build ADK Agent objects for future live execution. Tests still pass without API keys.
 
 ## Next steps (post-v0)
 
