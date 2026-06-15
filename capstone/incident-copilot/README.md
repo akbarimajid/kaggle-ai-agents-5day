@@ -13,10 +13,11 @@ Platform engineer / SRE / MLOps engineer on-call for data orchestration and batc
 ## v0 scope
 
 * Architecture and agent design documentation
-* Mock incident scenarios (`INC-001` … `INC-003`)
+* Mock incident scenarios (`INC-001` to `INC-003`)
 * Fake logs, metrics, Kubernetes events, Airflow status, runbooks, deployment metadata
-* Tool contracts documented; deterministic mock tools implemented (ADK/LLM agents not yet)
-* Golden eval answers and scoring rubric
+* Deterministic mock tools, eval harness, and golden answers
+* Deterministic manual investigator baseline (PR #2)
+* ADK coordinator and specialist topology boundary (PR #3)
 * Coding-agent guidance (`AGENTS.md`)
 
 ## Out of scope (v0)
@@ -26,14 +27,15 @@ Platform engineer / SRE / MLOps engineer on-call for data orchestration and batc
 * Full application UI or production auth
 * Loop-based critic/refiner workflow (documented as future stretch only)
 * Automated remediation execution
+* Live LLM execution in tests (PR #3 adds topology only)
 
 ## Day 1b architecture mapping
 
 | Pattern | Role in this capstone |
 |---------|----------------------|
 | **LLM orchestrator** (primary) | `IncidentCoordinatorAgent` dynamically selects specialist investigators based on symptoms |
-| **Sequential** (supporting) | Fixed final pipeline: evidence → diagnosis → safe remediation → incident summary |
-| **Loop** (future) | `SafetyCriticAgent` + refiner to improve diagnosis until approved or `max_iterations` — not implemented in v0 |
+| **Sequential** (supporting) | Fixed final pipeline: evidence -> diagnosis -> safe remediation -> incident summary |
+| **Loop** (future) | `SafetyCriticAgent` + refiner to improve diagnosis until approved or `max_iterations` - not implemented in v0 |
 
 See [notes/day-1b-agent-architectures.md](../../notes/day-1b-agent-architectures.md) for course context.
 
@@ -41,16 +43,13 @@ See [notes/day-1b-agent-architectures.md](../../notes/day-1b-agent-architectures
 
 ```
 User incident report
-    → IncidentCoordinatorAgent (LLM orchestrator)
-        → AirflowInvestigatorAgent
-        → KubernetesInvestigatorAgent
-        → LogsMetricsInvestigatorAgent
-        → RunbookAdvisorAgent
-    → Sequential reporting stage
-        → evidence collector
-        → diagnosis generator
-        → safety check
-        → IncidentSummaryAgent
+    -> IncidentCoordinatorAgent (LLM orchestrator)
+        -> AirflowInvestigatorAgent
+        -> KubernetesInvestigatorAgent
+        -> LogsMetricsInvestigatorAgent
+        -> RunbookAdvisorAgent
+    -> Sequential reporting stage
+        -> SummarySafetyAgent
 ```
 
 Specialist agents are conceptually exposed like `AgentTool` wrappers. State handoff uses keys such as `evidence_bundle`, `diagnosis_draft`, `remediation_plan`, `incident_summary`.
@@ -76,7 +75,7 @@ Specialist agents are conceptually exposed like `AgentTool` wrappers. State hand
   | Field | Description |
   |-------|-------------|
   | `root_cause` | Likely root cause with evidence backing |
-  | `confidence` | Calibrated score (0.0–1.0) |
+  | `confidence` | Calibrated score (0.0-1.0) |
   | `evidence` | Citations from logs, metrics, k8s, airflow, deployments |
   | `clarifying_questions` | Questions to reduce ambiguity before acting |
   | `actions` | Safe next steps only |
@@ -101,7 +100,7 @@ Specialist agents are conceptually exposed like `AgentTool` wrappers. State hand
 
 ## Public repo safety
 
-* **Mock data only** — no real hostnames, project IDs, emails, or secrets
+* **Mock data only** - no real hostnames, project IDs, emails, or secrets
 * **No cloud deploy** in v0
 * **No production dependencies** (Airflow/K8s clients deferred)
 * Follow [.cursor/rules/no-pii-in-repo.mdc](../../.cursor/rules/no-pii-in-repo.mdc)
@@ -110,26 +109,27 @@ Specialist agents are conceptually exposed like `AgentTool` wrappers. State hand
 
 ```text
 capstone/incident-copilot/
-├── README.md
-├── AGENTS.md
-├── app/
-│   └── incident_copilot/   # mock tools + eval runner
-├── tests/
-├── data/
-│   ├── incidents/
-│   ├── logs/
-│   ├── metrics/
-│   ├── k8s/
-│   ├── airflow/
-│   └── runbooks/
-├── docs/
-│   ├── architecture.md
-│   ├── scenarios.md
-│   ├── tool-contracts.md
-│   └── agent-design.md
-└── evals/
-    ├── golden-answers.json
-    └── example-predictions.json
+|-- README.md
+|-- AGENTS.md
+|-- requirements-adk.txt
+|-- app/
+|   `-- incident_copilot/
+|-- tests/
+|-- data/
+|   |-- incidents/
+|   |-- logs/
+|   |-- metrics/
+|   |-- k8s/
+|   |-- airflow/
+|   `-- runbooks/
+|-- docs/
+|   |-- architecture.md
+|   |-- scenarios.md
+|   |-- tool-contracts.md
+|   `-- agent-design.md
+`-- evals/
+    |-- golden-answers.json
+    `-- example-predictions.json
 ```
 
 ## Local validation
@@ -141,6 +141,8 @@ cd capstone/incident-copilot
 PYTHONPATH=app python -m unittest discover -s tests
 PYTHONPATH=app python -m incident_copilot.manual_investigator --all --output evals/manual-investigator-predictions.json
 PYTHONPATH=app python -m incident_copilot.eval_runner --predictions evals/manual-investigator-predictions.json
+PYTHONPATH=app python -m incident_copilot.adk_coordinator --topology
+PYTHONPATH=app python -m incident_copilot.adk_coordinator --incident-id INC-001
 ```
 
 Single-incident investigation:
@@ -150,12 +152,44 @@ PYTHONPATH=app python -m incident_copilot.manual_investigator --incident-id INC-
 PYTHONPATH=app python -m incident_copilot.manual_investigator --incident-id INC-001 --output /tmp/inc-001-prediction.json
 ```
 
-Stdlib only. No extra dependencies required.
+Stdlib only. No extra dependencies required for deterministic validation.
+
+## Capstone progression
+
+| PR | Focus |
+|----|-------|
+| #1 | Mock data, tool contracts, eval harness, architecture docs |
+| #2 | Deterministic end-to-end manual investigator (quality gate) |
+| #3 | ADK coordinator and specialist agent topology boundary |
+
+PR #3 adds the Day 1b multi-agent architecture layer beside the deterministic baseline. It defines the agentic boundary only. It does not add production deployment or live LLM execution. The manual investigator remains the acceptance gate (54 / 54).
+
+## ADK layer (optional)
+
+The ADK coordinator lives in `adk_agents.py` and `adk_coordinator.py`. It defines specialist investigators, the `IncidentCoordinatorAgent` orchestrator, and the sequential `SummarySafetyAgent` reporting stage.
+
+Offline by default:
+
+```bash
+cd capstone/incident-copilot
+PYTHONPATH=app python -m incident_copilot.adk_coordinator --topology
+PYTHONPATH=app python -m incident_copilot.adk_coordinator --incident-id INC-001
+```
+
+`run_adk_incident_analysis()` defaults to `execution_mode=deterministic`, which delegates to `manual_investigator` without calling a live model.
+
+Optional ADK install (not required for tests):
+
+```bash
+pip install -r requirements-adk.txt
+```
+
+When `google-adk` is installed, `build_incident_coordinator(materialize_adk=True)` can build ADK Agent objects for future live execution. Tests still pass without API keys.
 
 ## Next steps (post-v0)
 
-1. ~~Implement read-only mock tool functions against `data/`~~ (done)
-2. ~~Deterministic manual investigator (`manual_investigator.py`)~~ (done)
-3. Wire ADK agents per `docs/agent-design.md` to replace rule-based diagnosis
-4. ~~Run eval harness against `evals/golden-answers.json`~~ (deterministic scorer + manual investigator done)
+1. Mock tool functions and data foundation (done)
+2. Deterministic manual investigator (done)
+3. ADK coordinator and specialist topology (done)
+4. Swap deterministic delegate for live ADK agent execution behind the same boundary
 5. Optionally add Loop critic/refiner stage

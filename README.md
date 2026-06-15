@@ -36,27 +36,41 @@ The course and related exercises may involve:
 
 ```text
 kaggle-ai-agents-5day/
-├── README.md
-├── day-1/
-│   └── README.md
-├── notes/
-│   ├── day-1-learning-log.md
-│   ├── day-1-new-sdlc-summary.md
-│   ├── day-1-visuals-to-recreate.md
-│   └── day-1b-agent-architectures.md
-└── scratch/
-    └── .gitkeep
+|-- README.md
+|-- capstone/
+|   `-- incident-copilot/
+|-- day-1/
+|   `-- README.md
+|-- notes/
+|   |-- day-1-learning-log.md
+|   |-- day-1-new-sdlc-summary.md
+|   |-- day-1-visuals-to-recreate.md
+|   `-- day-1b-agent-architectures.md
+`-- scratch/
+    `-- .gitkeep
 ```
 
-## Capstone
+## Capstone status
 
-Course capstone project: **[AI Platform Incident Copilot](capstone/incident-copilot/)** — multi-agent incident investigation using mock Airflow/Kubernetes telemetry (v0: docs, mock data, evals; no deployment).
+This repo uses **vibe coding** as the development workflow: AI-assisted iteration with explicit guardrails, eval gates, and public-safe documentation.
+
+The capstone demonstrates **agentic engineering for AI platform operations**: multi-agent incident investigation over mock Airflow, Kubernetes, logs, metrics, and runbooks.
+
+| PR | Capability | Focus |
+|----|------------|-------|
+| #1 | Foundation | Mock incident data, deterministic tools, contracts, eval harness |
+| #2 | Deterministic baseline | End-to-end manual investigator (54 / 54 eval score) |
+| #3 | Agent topology | ADK coordinator and specialist agent topology (offline-safe; no live LLM in tests) |
+
+**Project:** [AI Platform Incident Copilot](capstone/incident-copilot/)
+
+**Career alignment:** AI platform engineering, MLOps, DevOps/SRE, and GenAI platform roles.
 
 ## Day 1: From Vibe Coding to Agentic Engineering
 
 * [Day 1 SDLC summary](notes/day-1-new-sdlc-summary.md)
 * [Day 1 visuals to recreate](notes/day-1-visuals-to-recreate.md)
-* [Day 1 → capstone mapping](capstone/incident-copilot/docs/day-1-capstone-mapping.md)
+* [Day 1 to capstone mapping](capstone/incident-copilot/docs/day-1-capstone-mapping.md)
 * [Incident copilot output contract](capstone/incident-copilot/docs/output-contract.md)
 
 ## Daily Progress
