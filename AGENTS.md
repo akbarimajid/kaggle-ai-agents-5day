@@ -45,7 +45,6 @@ Do not skip quality gates to jump to live LLM behavior.
 * Live ADK or LLM execution must stay optional until explicitly scoped.
 * Keep generated predictions untracked.
 * Do not commit runtime artifacts such as `__pycache__/` or `*.pyc`.
-* Do not commit `.cursor/`.
 * Do not commit secrets, credentials, billing info, project IDs, or private operational
   details.
 * Keep changes small and PR-scoped.
