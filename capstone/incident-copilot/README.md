@@ -15,7 +15,7 @@ Platform engineer / SRE / MLOps engineer on-call for data orchestration and batc
 * Architecture and agent design documentation
 * Mock incident scenarios (`INC-001` … `INC-003`)
 * Fake logs, metrics, Kubernetes events, Airflow status, runbooks, deployment metadata
-* Tool contracts (interfaces only — no implementation)
+* Tool contracts documented; deterministic mock tools implemented (ADK/LLM agents not yet)
 * Golden eval answers and scoring rubric
 * Coding-agent guidance (`AGENTS.md`)
 

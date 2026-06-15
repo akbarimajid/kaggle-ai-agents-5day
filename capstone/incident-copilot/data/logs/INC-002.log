@@ -1,0 +1,10 @@
+2026-06-14T22:12:05Z INFO scheduler airflow.jobs.scheduler_job_runner DAG customer_segmentation_daily run started run_id=scheduled__2026-06-14T21:00:00+00:00
+2026-06-14T22:12:08Z INFO worker airflow.task.operators Loading DAG bundle version v2.14.0 for dag_id=customer_segmentation_daily
+2026-06-14T22:12:15Z ERROR worker airflow.task.operators Task failed: KeyError: environment variable BQ_DATASET_PROD not set
+2026-06-14T22:12:16Z ERROR worker airflow.providers.google.cloud.operators.bigquery BigQuery hook init failed: dataset analytics_prod_v2 not found in project fake-data-platform-001
+2026-06-14T22:12:18Z ERROR worker airflow.models.taskinstance Task build_segments failed with exit code 1
+2026-06-14T22:15:00Z WARN scheduler airflow.jobs.scheduler_job_runner DAG customer_segmentation_daily marked failed; 3 consecutive failures
+2026-06-14T22:18:22Z INFO worker airflow.configuration Reading env from worker deployment config revision 20260614-2210
+2026-06-14T22:18:23Z WARN worker airflow.configuration Expected env BQ_DATASET_PROD missing; only BQ_DATASET_STAGING present
+2026-06-14T22:30:11Z ERROR worker airflow.task.operators BigQuery job submission error: 404 Not found: Dataset fake-data-platform-001:analytics_prod_v2
+2026-06-14T23:00:00Z INFO scheduler airflow.jobs.scheduler_job_runner Next scheduled run skipped due to prior failure threshold
