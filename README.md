@@ -56,11 +56,11 @@ This repo uses **vibe coding** as the development workflow: AI-assisted iteratio
 
 The capstone demonstrates **agentic engineering for AI platform operations**: multi-agent incident investigation over mock Airflow, Kubernetes, logs, metrics, and runbooks.
 
-| PR | Status | Focus |
-|----|--------|-------|
-| #1 | Merged | Mock incident data, deterministic tools, contracts, eval harness |
-| #2 | Merged | Deterministic end-to-end manual investigator (54 / 54 eval score) |
-| #3 | Open | ADK coordinator and specialist agent topology (offline-safe; no live LLM in tests) |
+| PR | Capability | Focus |
+|----|------------|-------|
+| #1 | Foundation | Mock incident data, deterministic tools, contracts, eval harness |
+| #2 | Deterministic baseline | End-to-end manual investigator (54 / 54 eval score) |
+| #3 | Agent topology | ADK coordinator and specialist agent topology (offline-safe; no live LLM in tests) |
 
 **Project:** [AI Platform Incident Copilot](capstone/incident-copilot/)
 
