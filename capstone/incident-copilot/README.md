@@ -139,14 +139,23 @@ From `capstone/incident-copilot`:
 ```bash
 cd capstone/incident-copilot
 PYTHONPATH=app python -m unittest discover -s tests
-PYTHONPATH=app python -m incident_copilot.eval_runner --predictions evals/example-predictions.json
+PYTHONPATH=app python -m incident_copilot.manual_investigator --all --output evals/manual-investigator-predictions.json
+PYTHONPATH=app python -m incident_copilot.eval_runner --predictions evals/manual-investigator-predictions.json
 ```
 
-Stdlib only — no extra dependencies required.
+Single-incident investigation:
+
+```bash
+PYTHONPATH=app python -m incident_copilot.manual_investigator --incident-id INC-001
+PYTHONPATH=app python -m incident_copilot.manual_investigator --incident-id INC-001 --output /tmp/inc-001-prediction.json
+```
+
+Stdlib only. No extra dependencies required.
 
 ## Next steps (post-v0)
 
 1. ~~Implement read-only mock tool functions against `data/`~~ (done)
-2. Wire ADK agents per `docs/agent-design.md`
-3. ~~Run eval harness against `evals/golden-answers.json`~~ (deterministic scorer done; agent predictions TBD)
-4. Optionally add Loop critic/refiner stage
+2. ~~Deterministic manual investigator (`manual_investigator.py`)~~ (done)
+3. Wire ADK agents per `docs/agent-design.md` to replace rule-based diagnosis
+4. ~~Run eval harness against `evals/golden-answers.json`~~ (deterministic scorer + manual investigator done)
+5. Optionally add Loop critic/refiner stage
