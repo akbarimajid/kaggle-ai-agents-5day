@@ -54,6 +54,8 @@ User incident report
 
 Specialist agents are conceptually exposed like `AgentTool` wrappers. State handoff uses keys such as `evidence_bundle`, `diagnosis_draft`, `remediation_plan`, `incident_summary`.
 
+Engineering operating model: docs/agentic-engineering-playbook.md
+
 ## Mock system layers
 
 | Layer | v0 representation |
