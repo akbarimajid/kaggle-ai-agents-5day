@@ -19,7 +19,7 @@ SPECIALIST_AGENT_NAMES = (
 
 SEQUENTIAL_STAGE_NAMES = (SUMMARY_SAFETY_AGENT_NAME,)
 
-DEFAULT_MODEL = "gemini-flash-latest"
+DEFAULT_MODEL = "gemini-2.5-flash"
 
 
 @dataclass(frozen=True)

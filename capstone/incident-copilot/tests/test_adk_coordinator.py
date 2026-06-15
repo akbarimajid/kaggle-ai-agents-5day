@@ -63,11 +63,16 @@ class AdkCoordinatorTests(unittest.TestCase):
         self.assertNotIn("prediction", result)
         self.assertIn("topology", result)
 
-    def test_no_live_model_or_api_key_needed_for_tests(self) -> None:
-        self.assertFalse(adk_agents.adk_available())
+    def test_default_execution_is_offline_safe_without_api_key(self) -> None:
         result = adk_coordinator.run_adk_incident_analysis("INC-003")
+        self.assertEqual(result["execution_mode"], "deterministic")
         self.assertEqual(result["topology"]["live_llm_required_for_tests"], False)
         self.assertEqual(result["topology"]["execution_default"], "deterministic")
+        self.assertEqual(result["delegated_to"], "manual_investigator")
+        self.assertNotIn("live_model_executed", result)
+        prediction = result["prediction"]
+        for field in OUTPUT_CONTRACT_FIELDS:
+            self.assertIn(field, prediction)
 
     def test_manual_investigator_still_scores_54_of_54(self) -> None:
         predictions = manual_investigator.investigate_all()
