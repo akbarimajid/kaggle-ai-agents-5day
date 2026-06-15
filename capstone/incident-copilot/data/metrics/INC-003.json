@@ -1,0 +1,54 @@
+{
+  "incident_id": "INC-003",
+  "window_start": "2026-06-15T03:00:00Z",
+  "window_end": "2026-06-15T06:00:00Z",
+  "series": [
+    {
+      "name": "airflow.scheduler.restart.count",
+      "unit": "restarts",
+      "values": [
+        {"ts": "2026-06-15T03:00:00Z", "value": 2},
+        {"ts": "2026-06-15T03:30:00Z", "value": 9},
+        {"ts": "2026-06-15T04:00:00Z", "value": 14},
+        {"ts": "2026-06-15T05:00:00Z", "value": 18}
+      ]
+    },
+    {
+      "name": "airflow.scheduler.healthy",
+      "unit": "boolean",
+      "values": [
+        {"ts": "2026-06-15T03:00:00Z", "value": 1},
+        {"ts": "2026-06-15T03:20:00Z", "value": 0},
+        {"ts": "2026-06-15T04:00:00Z", "value": 0}
+      ]
+    },
+    {
+      "name": "pgbouncer.pool.active_connections",
+      "unit": "connections",
+      "labels": {"pool": "airflow_metadata"},
+      "values": [
+        {"ts": "2026-06-15T03:10:00Z", "value": 38},
+        {"ts": "2026-06-15T03:20:00Z", "value": 48},
+        {"ts": "2026-06-15T03:30:00Z", "value": 50}
+      ]
+    },
+    {
+      "name": "pgbouncer.pool.waiting_clients",
+      "unit": "clients",
+      "labels": {"pool": "airflow_metadata"},
+      "values": [
+        {"ts": "2026-06-15T03:10:00Z", "value": 0},
+        {"ts": "2026-06-15T03:25:00Z", "value": 8},
+        {"ts": "2026-06-15T03:35:00Z", "value": 12}
+      ]
+    },
+    {
+      "name": "pgbouncer.pool.max_connections",
+      "unit": "connections",
+      "labels": {"pool": "airflow_metadata"},
+      "values": [
+        {"ts": "2026-06-15T03:00:00Z", "value": 50}
+      ]
+    }
+  ]
+}

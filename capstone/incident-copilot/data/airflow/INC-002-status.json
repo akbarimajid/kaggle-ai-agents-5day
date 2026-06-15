@@ -1,0 +1,16 @@
+{
+  "incident_id": "INC-002",
+  "scheduler_healthy": true,
+  "queued_task_count": 2,
+  "running_task_count": 0,
+  "failed_task_count": 6,
+  "affected_dags": ["customer_segmentation_daily"],
+  "worker_pods_available": 3,
+  "worker_pods_pending": 0,
+  "notes": [
+    "DAG customer_segmentation_daily failing since deploy v2.14.0 at 2026-06-14T22:10:00Z",
+    "Task build_segments failed: missing BQ_DATASET_PROD env var",
+    "BigQuery dataset analytics_prod_v2 not found",
+    "Last successful run on bundle v2.13.2"
+  ]
+}

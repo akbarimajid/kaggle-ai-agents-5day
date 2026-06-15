@@ -1,0 +1,15 @@
+{
+  "incident_id": "INC-001",
+  "scheduler_healthy": true,
+  "queued_task_count": 51,
+  "running_task_count": 0,
+  "failed_task_count": 0,
+  "affected_dags": ["etl_daily_sales", "marketing_load", "inventory_sync"],
+  "worker_pods_available": 0,
+  "worker_pods_pending": 11,
+  "notes": [
+    "Scheduler operational but no workers available",
+    "All worker pod creation attempts failing in analytics-batch namespace",
+    "Tasks accumulating in queued state since 2026-06-15T08:10:00Z"
+  ]
+}

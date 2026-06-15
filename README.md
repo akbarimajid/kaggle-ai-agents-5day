@@ -40,10 +40,15 @@ kaggle-ai-agents-5day/
 ├── day-1/
 │   └── README.md
 ├── notes/
-│   └── day-1-learning-log.md
+│   ├── day-1-learning-log.md
+│   └── day-1b-agent-architectures.md
 └── scratch/
     └── .gitkeep
 ```
+
+## Capstone
+
+Course capstone project: **[AI Platform Incident Copilot](capstone/incident-copilot/)** — multi-agent incident investigation using mock Airflow/Kubernetes telemetry (v0: docs, mock data, evals; no deployment).
 
 ## Daily Progress
 

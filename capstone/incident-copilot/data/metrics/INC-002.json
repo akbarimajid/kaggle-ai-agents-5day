@@ -1,0 +1,36 @@
+{
+  "incident_id": "INC-002",
+  "window_start": "2026-06-14T22:00:00Z",
+  "window_end": "2026-06-15T01:00:00Z",
+  "series": [
+    {
+      "name": "airflow.dag.run.failed.count",
+      "unit": "runs",
+      "labels": {"dag_id": "customer_segmentation_daily"},
+      "values": [
+        {"ts": "2026-06-14T21:00:00Z", "value": 0},
+        {"ts": "2026-06-14T22:15:00Z", "value": 1},
+        {"ts": "2026-06-14T23:00:00Z", "value": 3},
+        {"ts": "2026-06-15T00:00:00Z", "value": 3}
+      ]
+    },
+    {
+      "name": "airflow.task.failure.rate",
+      "unit": "percent",
+      "labels": {"dag_id": "customer_segmentation_daily"},
+      "values": [
+        {"ts": "2026-06-14T21:00:00Z", "value": 0},
+        {"ts": "2026-06-14T22:15:00Z", "value": 100},
+        {"ts": "2026-06-14T23:00:00Z", "value": 100}
+      ]
+    },
+    {
+      "name": "deployments.airflow_dag_bundle.version",
+      "unit": "version",
+      "values": [
+        {"ts": "2026-06-14T22:09:00Z", "value": 2.13},
+        {"ts": "2026-06-14T22:11:00Z", "value": 2.14}
+      ]
+    }
+  ]
+}
