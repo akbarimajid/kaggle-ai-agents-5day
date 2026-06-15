@@ -1,6 +1,7 @@
 # Agent Instructions
 
-This repository is a public learning portfolio for the Google/Kaggle 5-Day AI Agents course.
+This repository is a public learning portfolio for the Google/Kaggle 5-Day AI Agents
+course.
 
 The main capstone is:
 
@@ -8,9 +9,11 @@ The main capstone is:
 
 ## Operating model
 
-Use vibe coding as the development workflow, but treat the capstone as an agentic engineering project.
+Use vibe coding as the development workflow, but treat the capstone as an agentic
+engineering project.
 
-The goal is not to generate code quickly. The goal is to build a testable, reviewable, public-safe AI Platform Incident Copilot.
+The goal is not to generate code quickly. The goal is to build a testable, reviewable,
+public-safe AI Platform Incident Copilot.
 
 Read before making capstone changes:
 
@@ -43,7 +46,8 @@ Do not skip quality gates to jump to live LLM behavior.
 * Keep generated predictions untracked.
 * Do not commit runtime artifacts such as `__pycache__/` or `*.pyc`.
 * Do not commit `.cursor/`.
-* Do not commit secrets, credentials, billing info, project IDs, or private operational details.
+* Do not commit secrets, credentials, billing info, project IDs, or private operational
+  details.
 * Keep changes small and PR-scoped.
 * Prefer stdlib-only code unless a dependency is explicitly approved.
 
@@ -68,4 +72,5 @@ This repo should show disciplined AI-assisted engineering for:
 * DevOps/SRE
 * GenAI platform roles
 
-The strongest story is: AI accelerates implementation, but human judgment defines architecture, constraints, verification, and merge decisions.
+The strongest story is: AI accelerates implementation, but human judgment defines
+architecture, constraints, verification, and merge decisions.
