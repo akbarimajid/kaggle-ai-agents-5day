@@ -1,0 +1,48 @@
+{
+  "incident_id": "INC-001",
+  "window_start": "2026-06-15T08:00:00Z",
+  "window_end": "2026-06-15T09:30:00Z",
+  "series": [
+    {
+      "name": "airflow.tasks.queued.count",
+      "unit": "tasks",
+      "values": [
+        {"ts": "2026-06-15T08:00:00Z", "value": 5},
+        {"ts": "2026-06-15T08:15:00Z", "value": 24},
+        {"ts": "2026-06-15T08:30:00Z", "value": 47},
+        {"ts": "2026-06-15T09:00:00Z", "value": 51}
+      ]
+    },
+    {
+      "name": "airflow.workers.available",
+      "unit": "pods",
+      "values": [
+        {"ts": "2026-06-15T08:00:00Z", "value": 4},
+        {"ts": "2026-06-15T08:15:00Z", "value": 0},
+        {"ts": "2026-06-15T08:30:00Z", "value": 0},
+        {"ts": "2026-06-15T09:00:00Z", "value": 0}
+      ]
+    },
+    {
+      "name": "k8s.namespace.quota.cpu.used_percent",
+      "unit": "percent",
+      "labels": {"namespace": "analytics-batch"},
+      "values": [
+        {"ts": "2026-06-15T08:00:00Z", "value": 88},
+        {"ts": "2026-06-15T08:15:00Z", "value": 100},
+        {"ts": "2026-06-15T08:30:00Z", "value": 100},
+        {"ts": "2026-06-15T09:00:00Z", "value": 100}
+      ]
+    },
+    {
+      "name": "k8s.pods.pending.count",
+      "unit": "pods",
+      "labels": {"namespace": "analytics-batch", "reason": "Unschedulable"},
+      "values": [
+        {"ts": "2026-06-15T08:15:00Z", "value": 3},
+        {"ts": "2026-06-15T08:30:00Z", "value": 8},
+        {"ts": "2026-06-15T09:00:00Z", "value": 11}
+      ]
+    }
+  ]
+}

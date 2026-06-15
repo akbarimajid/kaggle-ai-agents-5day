@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: List
+items:
+  - apiVersion: v1
+    kind: Event
+    metadata:
+      namespace: airflow-prod
+    involvedObject:
+      kind: Pod
+      name: airflow-scheduler-6b4d7f9abc-1
+    reason: Unhealthy
+    message: "Liveness probe failed: scheduler heartbeat stale > 60s"
+    type: Warning
+    firstTimestamp: "2026-06-15T03:18:30Z"
+    count: 8
+  - apiVersion: v1
+    kind: Event
+    metadata:
+      namespace: airflow-prod
+    involvedObject:
+      kind: Pod
+      name: airflow-scheduler-6b4d7f9abc-1
+    reason: Killing
+    message: "Container scheduler failed liveness probe, will be restarted"
+    type: Normal
+    firstTimestamp: "2026-06-15T03:18:35Z"
+    count: 7
+  - apiVersion: v1
+    kind: Event
+    metadata:
+      namespace: airflow-prod
+    involvedObject:
+      kind: Pod
+      name: airflow-scheduler-6b4d7f9abc-1
+    reason: BackOff
+    message: "Back-off restarting failed container scheduler; exit code 1 metadata DB connection error"
+    type: Warning
+    firstTimestamp: "2026-06-15T03:25:00Z"
+    lastTimestamp: "2026-06-15T05:00:00Z"
+    count: 14
+  - apiVersion: v1
+    kind: Event
+    metadata:
+      namespace: airflow-prod
+    involvedObject:
+      kind: Pod
+      name: pgbouncer-5c9d8b7f6-0
+    reason: ThresholdExceeded
+    message: "Connection pool airflow_metadata at capacity 50/50 with 12 waiting clients"
+    type: Warning
+    firstTimestamp: "2026-06-15T03:25:11Z"
+    count: 9

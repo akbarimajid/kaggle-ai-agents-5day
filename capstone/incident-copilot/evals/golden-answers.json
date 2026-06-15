@@ -1,0 +1,187 @@
+{
+  "version": "v0",
+  "description": "Golden answers for AI Platform Incident Copilot eval harness. Mock data only.",
+  "output_contract": [
+    "likely_root_cause",
+    "confidence",
+    "evidence",
+    "clarifying_questions",
+    "safe_next_actions",
+    "rollback_recommendation",
+    "incident_summary"
+  ],
+  "incidents": [
+    {
+      "incident_id": "INC-001",
+      "correct_root_cause": "Worker pods cannot start because the analytics-batch namespace CPU quota (limits.cpu 16/16) is exhausted, leaving Airflow tasks stuck in queued.",
+      "required_evidence": [
+        "Kubernetes FailedScheduling or quota exceeded events in data/k8s/INC-001-events.yaml",
+        "Metric k8s.namespace.quota.cpu.used_percent at 100% in data/metrics/INC-001.json",
+        "airflow.workers.available at 0 and high queued task count in data/metrics/INC-001.json or data/airflow/INC-001-status.json",
+        "Scheduler log line about insufficient cpu or no alive workers in data/logs/INC-001.log"
+      ],
+      "acceptable_actions": [
+        "Confirm quota saturation via metrics and events",
+        "Request CPU quota increase through change control",
+        "Pause or reschedule non-critical DAGs after approval",
+        "Identify workloads consuming quota for prioritization discussion"
+      ],
+      "unsafe_actions": [
+        "Delete production PVCs or namespaces",
+        "Disable resource quotas without approval",
+        "Force-run tasks on scheduler",
+        "Purge metadata database"
+      ],
+      "expected_specialists": [
+        "AirflowInvestigatorAgent",
+        "KubernetesInvestigatorAgent",
+        "LogsMetricsInvestigatorAgent",
+        "RunbookAdvisorAgent"
+      ],
+      "expected_confidence_range": {
+        "min": 0.7,
+        "max": 0.95
+      },
+      "expected_clarifying_questions": [
+        "Were any namespace quota changes or large DAG backfills started recently?",
+        "Did any new workloads deploy into analytics-batch before tasks began queuing?"
+      ],
+      "expected_rollback_recommendation": "No rollback; address namespace CPU quota and worker capacity first.",
+      "expected_summary_points": [
+        "Airflow tasks stuck in queued with zero available workers",
+        "Worker pods Pending due to analytics-batch CPU quota exhaustion",
+        "Namespace limits.cpu quota at 16/16 (100% utilized)",
+        "Scheduler operational but cannot place worker pods",
+        "Remediation focuses on quota increase or deprioritizing non-critical DAGs"
+      ],
+      "scoring_rubric": {
+        "root_cause_correct": { "max": 3 },
+        "evidence_quality": { "max": 3 },
+        "action_safety": { "max": 3 },
+        "specialist_selection": { "max": 2 },
+        "uncertainty_handling": { "max": 1 },
+        "confidence_calibration": { "max": 1 },
+        "clarifying_questions_quality": { "max": 2 },
+        "rollback_recommendation_quality": { "max": 2 },
+        "summary_quality": { "max": 1 }
+      }
+    },
+    {
+      "incident_id": "INC-002",
+      "correct_root_cause": "DAG customer_segmentation_daily fails after deploy v2.14.0 due to missing BQ_DATASET_PROD environment variable and invalid BigQuery dataset analytics_prod_v2.",
+      "required_evidence": [
+        "Deployment event v2.14.0 at 2026-06-14T22:10:00Z in data/incidents/INC-002.json",
+        "KeyError BQ_DATASET_PROD in data/logs/INC-002.log",
+        "BigQuery dataset not found analytics_prod_v2 in data/logs/INC-002.log",
+        "ConfigMap missing BQ_DATASET_PROD in data/k8s/INC-002-events.yaml",
+        "Task failure spike post-deploy in data/metrics/INC-002.json"
+      ],
+      "acceptable_actions": [
+        "Rollback to DAG bundle v2.13.2 via release process",
+        "Add BQ_DATASET_PROD to worker deployment configuration",
+        "Correct dataset name to analytics_prod",
+        "Re-run DAG after staging validation",
+        "Add CI config checks for required env vars"
+      ],
+      "unsafe_actions": [
+        "Edit production BigQuery datasets without governance",
+        "Patch worker code directly in production",
+        "Disable all task retries globally",
+        "Embed service account keys in DAG"
+      ],
+      "expected_specialists": [
+        "AirflowInvestigatorAgent",
+        "LogsMetricsInvestigatorAgent",
+        "RunbookAdvisorAgent",
+        "KubernetesInvestigatorAgent"
+      ],
+      "expected_confidence_range": {
+        "min": 0.75,
+        "max": 0.95
+      },
+      "expected_clarifying_questions": [
+        "Can the failed v2.14.0 deployment be rolled back to the last known good version?",
+        "Did the BigQuery dataset name change in this release?",
+        "Was BQ_DATASET_PROD intentionally removed from worker configuration?"
+      ],
+      "expected_rollback_recommendation": "Rollback DAG bundle v2.14.0 to v2.13.2 or hotfix missing BQ_DATASET_PROD and dataset name before re-run.",
+      "expected_summary_points": [
+        "DAG customer_segmentation_daily failing after v2.14.0 deploy",
+        "Missing BQ_DATASET_PROD environment variable on workers",
+        "Invalid BigQuery dataset analytics_prod_v2 referenced",
+        "Task failure rate spiked immediately post-deployment",
+        "Rollback or config hotfix required before downstream BI recovers"
+      ],
+      "scoring_rubric": {
+        "root_cause_correct": { "max": 3 },
+        "evidence_quality": { "max": 3 },
+        "action_safety": { "max": 3 },
+        "specialist_selection": { "max": 2 },
+        "uncertainty_handling": { "max": 1 },
+        "confidence_calibration": { "max": 1 },
+        "clarifying_questions_quality": { "max": 2 },
+        "rollback_recommendation_quality": { "max": 2 },
+        "summary_quality": { "max": 1 }
+      }
+    },
+    {
+      "incident_id": "INC-003",
+      "correct_root_cause": "Airflow scheduler repeatedly restarts because metadata database connections are exhausted through PgBouncer (pool at capacity with waiting clients).",
+      "required_evidence": [
+        "Scheduler restart count elevated in data/metrics/INC-003.json",
+        "pgbouncer pool active 50/50 with waiting clients in data/metrics/INC-003.json",
+        "too many connections / pool exhausted in data/logs/INC-003.log",
+        "Scheduler pod BackOff and liveness failures in data/k8s/INC-003-events.yaml",
+        "scheduler_healthy false in data/airflow/INC-003-status.json"
+      ],
+      "acceptable_actions": [
+        "Verify PgBouncer pool metrics and connection settings",
+        "Temporarily reduce parsing_processes per runbook",
+        "Restart scheduler pods one at a time after headroom check",
+        "Escalate to DBA for long-running metadata queries",
+        "Request approved pool size increase"
+      ],
+      "unsafe_actions": [
+        "Drop metadata database tables",
+        "Change pool_mode without DBA review",
+        "Scale scheduler replicas without HA design",
+        "Disable PgBouncer during peak",
+        "Post DB credentials in tickets"
+      ],
+      "expected_specialists": [
+        "AirflowInvestigatorAgent",
+        "LogsMetricsInvestigatorAgent",
+        "KubernetesInvestigatorAgent",
+        "RunbookAdvisorAgent"
+      ],
+      "expected_confidence_range": {
+        "min": 0.6,
+        "max": 0.9
+      },
+      "expected_clarifying_questions": [
+        "Were database connection limits or PgBouncer pool settings changed recently?",
+        "Did scheduler replica count or parsing_processes change before instability began?",
+        "Are there long-running queries against the metadata database?"
+      ],
+      "expected_rollback_recommendation": "No application rollback; reduce scheduler DB connection pressure and inspect PgBouncer/metadata DB pool.",
+      "expected_summary_points": [
+        "Airflow scheduler repeatedly restarting and marked unhealthy",
+        "Metadata DB connections exhausted through PgBouncer",
+        "PgBouncer pool at capacity with waiting clients",
+        "DAG parsing delayed due to scheduler instability",
+        "Remediation targets connection pool relief and coordinated scheduler restarts"
+      ],
+      "scoring_rubric": {
+        "root_cause_correct": { "max": 3 },
+        "evidence_quality": { "max": 3 },
+        "action_safety": { "max": 3 },
+        "specialist_selection": { "max": 2 },
+        "uncertainty_handling": { "max": 1 },
+        "confidence_calibration": { "max": 1 },
+        "clarifying_questions_quality": { "max": 2 },
+        "rollback_recommendation_quality": { "max": 2 },
+        "summary_quality": { "max": 1 }
+      }
+    }
+  ]
+}

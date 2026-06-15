@@ -1,0 +1,11 @@
+2026-06-15T03:05:01Z INFO scheduler airflow.jobs.scheduler_job_runner Scheduler heartbeat OK
+2026-06-15T03:12:44Z WARN scheduler airflow.jobs.scheduler_job_runner Increased DAG parsing latency p95=4200ms
+2026-06-15T03:18:22Z ERROR pgbouncer pgbouncer cannot connect to server: remaining connection slots reserved for non-replication superuser connections
+2026-06-15T03:18:23Z ERROR scheduler airflow.utils.db sqlalchemy.exc.OperationalError: FATAL: too many connections for role airflow_metadata
+2026-06-15T03:18:25Z ERROR scheduler airflow.jobs.scheduler_job_runner Scheduler process exiting with code 1
+2026-06-15T03:18:40Z INFO scheduler airflow.jobs.scheduler_job_runner Scheduler process starting (restart count 14 in last hour)
+2026-06-15T03:25:11Z WARN pgbouncer pgbouncer pool airflow_metadata: 0 free connections, 48 active, 12 waiting clients
+2026-06-15T03:30:02Z ERROR scheduler airflow.jobs.scheduler_job_runner Lost connection to metadata database during DAG refresh
+2026-06-15T03:35:19Z ERROR scheduler airflow.jobs.scheduler_job_runner Scheduler unhealthy: metadata DB connection pool exhausted via pgbouncer
+2026-06-15T03:40:55Z WARN scheduler airflow.configuration parsing_processes=4 may exceed connection budget with current pool size 50
+2026-06-15T03:45:00Z INFO pgbouncer pgbouncer stats: maxwait=8.2s avg_wait=3.1s

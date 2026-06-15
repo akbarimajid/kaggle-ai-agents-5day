@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: List
+items:
+  - apiVersion: v1
+    kind: Event
+    metadata:
+      namespace: analytics-batch
+    involvedObject:
+      kind: Pod
+      name: airflow-worker-etl-daily-sales-x7k2m
+    reason: FailedScheduling
+    message: "0/12 nodes are available: 8 Insufficient cpu, 4 node(s) didn't match Pod's node affinity. preemption: not eligible"
+    type: Warning
+    firstTimestamp: "2026-06-15T08:12:03Z"
+    lastTimestamp: "2026-06-15T08:35:00Z"
+    count: 18
+  - apiVersion: v1
+    kind: Event
+    metadata:
+      namespace: analytics-batch
+    involvedObject:
+      kind: ResourceQuota
+      name: analytics-batch-cpu-quota
+    reason: ThresholdExceeded
+    message: "limits.cpu usage 16/16, cannot admit pod airflow-worker-etl-daily-sales-x7k2m requesting 2 CPU"
+    type: Warning
+    firstTimestamp: "2026-06-15T08:12:03Z"
+    lastTimestamp: "2026-06-15T09:00:00Z"
+    count: 24
+  - apiVersion: v1
+    kind: Event
+    metadata:
+      namespace: analytics-batch
+    involvedObject:
+      kind: Pod
+      name: airflow-worker-etl-daily-sales-x7k2m
+    reason: Unschedulable
+    message: "pod has unbound immediate PersistentVolumeClaims"
+    type: Warning
+    firstTimestamp: "2026-06-15T08:12:01Z"
+    count: 1
+  - apiVersion: v1
+    kind: Event
+    metadata:
+      namespace: analytics-batch
+    involvedObject:
+      kind: Pod
+      name: airflow-worker-marketing-load-p9q1n
+    reason: FailedScheduling
+    message: "exceeded quota analytics-batch-cpu-quota, requested limits.cpu=2"
+    type: Warning
+    firstTimestamp: "2026-06-15T08:20:11Z"
+    count: 6

@@ -1,0 +1,10 @@
+2026-06-15T08:05:12Z INFO scheduler airflow.jobs.scheduler_job_runner Task instance queued: dag_id=etl_daily_sales task_id=extract_raw queue=default
+2026-06-15T08:05:14Z INFO scheduler airflow.jobs.scheduler_job_runner Task instance queued: dag_id=etl_daily_sales task_id=transform queue=default
+2026-06-15T08:10:22Z WARN scheduler airflow.jobs.scheduler_job_runner No alive workers found; 24 tasks waiting in queued state
+2026-06-15T08:12:01Z INFO scheduler airflow.executors.kubernetes_executor Attempting to create pod airflow-worker-etl-daily-sales-x7k2m in namespace analytics-batch
+2026-06-15T08:12:03Z ERROR scheduler airflow.executors.kubernetes_executor Pod airflow-worker-etl-daily-sales-x7k2m failed to start: FailedScheduling insufficient cpu in namespace analytics-batch
+2026-06-15T08:15:44Z WARN scheduler airflow.jobs.scheduler_job_runner Task etl_daily_sales.extract_raw has been in queued state for 600s
+2026-06-15T08:20:11Z INFO worker airflow.executors.kubernetes_executor Worker pod airflow-worker-etl-daily-sales-x7k2m phase=Pending reason=Unschedulable
+2026-06-15T08:25:33Z ERROR worker kubernetes.client Pod scheduling failed: exceeded quota analytics-batch-cpu-quota, requested 2 CPU limits.cpu
+2026-06-15T08:30:00Z WARN scheduler airflow.jobs.scheduler_job_runner 47 tasks across 6 DAGs remain queued; 0 workers available
+2026-06-15T08:35:17Z INFO scheduler airflow.jobs.scheduler_job_runner Namespace analytics-batch ResourceQuota limits.cpu: 16/16 used

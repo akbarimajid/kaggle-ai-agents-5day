@@ -1,0 +1,16 @@
+{
+  "incident_id": "INC-003",
+  "scheduler_healthy": false,
+  "queued_task_count": 34,
+  "running_task_count": 1,
+  "failed_task_count": 0,
+  "affected_dags": ["all"],
+  "worker_pods_available": 4,
+  "worker_pods_pending": 0,
+  "notes": [
+    "Scheduler restarted 18 times in 2 hours",
+    "Metadata DB connection errors via pgbouncer pool airflow_metadata",
+    "DAG parsing delayed p95 > 4s",
+    "Workers healthy; issue isolated to scheduler/metadata connectivity"
+  ]
+}

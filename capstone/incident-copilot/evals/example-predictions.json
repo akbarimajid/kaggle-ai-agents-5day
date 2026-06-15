@@ -1,0 +1,80 @@
+{
+  "predictions": [
+    {
+      "incident_id": "INC-001",
+      "root_cause": "Worker pods are pending because the analytics-batch namespace CPU quota is exhausted (limits.cpu 16/16), so Airflow tasks remain queued with zero available workers.",
+      "confidence": 0.88,
+      "evidence": [
+        "data/k8s/INC-001-events.yaml — FailedScheduling and quota ThresholdExceeded for analytics-batch-cpu-quota",
+        "data/metrics/INC-001.json — k8s.namespace.quota.cpu.used_percent at 100% and airflow.workers.available at 0",
+        "data/logs/INC-001.log — insufficient cpu in namespace analytics-batch and no alive workers",
+        "data/airflow/INC-001-status.json — 51 queued tasks and 11 pending worker pods"
+      ],
+      "clarifying_questions": [
+        "Were any namespace quota changes or large DAG backfills started in the last 24 hours?",
+        "Did any new workloads deploy into analytics-batch before tasks began queuing?"
+      ],
+      "actions": [
+        "Confirm quota saturation via metrics and Kubernetes events",
+        "Request CPU quota increase through change control",
+        "Pause non-critical DAGs after stakeholder approval"
+      ],
+      "rollback_recommendation": "No rollback recommended. Address analytics-batch CPU quota exhaustion and restore worker capacity first.",
+      "incident_summary": "Multiple Airflow tasks remained queued because worker pods could not schedule in analytics-batch. Kubernetes events show FailedScheduling and CPU quota at limits.cpu 16/16. Metrics confirm 100% quota usage and zero available workers. The scheduler is operational but cannot place workers. Remediation requires quota increase through change control or deprioritizing non-critical DAGs after approval.",
+      "specialists_used": [
+        "AirflowInvestigatorAgent",
+        "KubernetesInvestigatorAgent",
+        "LogsMetricsInvestigatorAgent",
+        "RunbookAdvisorAgent"
+      ],
+      "uncertainty": "High confidence given aligned quota, scheduling, and worker availability signals."
+    },
+    {
+      "incident_id": "INC-002",
+      "root_cause": "DAG customer_segmentation_daily fails after deploy v2.14.0 due to missing BQ_DATASET_PROD and invalid BigQuery dataset analytics_prod_v2.",
+      "confidence": 0.82,
+      "evidence": [
+        "data/incidents/INC-002.json — deployment v2.14.0 at 2026-06-14T22:10:00Z",
+        "data/logs/INC-002.log — KeyError BQ_DATASET_PROD not set and dataset analytics_prod_v2 not found",
+        "data/metrics/INC-002.json — task failure rate spike after deploy"
+      ],
+      "clarifying_questions": [
+        "Can deployment v2.14.0 be rolled back to v2.13.2 safely?"
+      ],
+      "actions": [
+        "Rollback to DAG bundle v2.13.2 via release process",
+        "Add BQ_DATASET_PROD to worker deployment configuration",
+        "Re-run failed DAG after staging validation"
+      ],
+      "rollback_recommendation": "Rollback DAG bundle from v2.14.0 to v2.13.2 via standard release process, or hotfix missing BQ_DATASET_PROD and correct dataset name.",
+      "incident_summary": "DAG customer_segmentation_daily began failing immediately after v2.14.0 deployment. Logs show missing BQ_DATASET_PROD and invalid dataset analytics_prod_v2. Task failure rate spiked post-deploy. Rollback or config hotfix required before downstream BI recovers.",
+      "specialists_used": [
+        "AirflowInvestigatorAgent",
+        "LogsMetricsInvestigatorAgent",
+        "RunbookAdvisorAgent"
+      ],
+      "uncertainty": "Confident about deploy correlation; may need config diff review to confirm dataset naming standard."
+    },
+    {
+      "incident_id": "INC-003",
+      "root_cause": "Airflow scheduler is restarting frequently because metadata database connections are failing; logs mention pool pressure but root cause may need more DB review.",
+      "confidence": 0.95,
+      "evidence": [
+        "data/logs/INC-003.log — too many connections and metadata DB connection pool exhausted",
+        "data/airflow/INC-003-status.json — scheduler_healthy false with 18 restarts noted"
+      ],
+      "clarifying_questions": [],
+      "actions": [
+        "Restart all scheduler pods immediately to clear errors",
+        "Review scheduler logs for connection errors"
+      ],
+      "rollback_recommendation": "Rollback scheduler deployment to previous version to restore stability.",
+      "incident_summary": "Scheduler is restarting due to database connection errors. Further investigation needed.",
+      "specialists_used": [
+        "AirflowInvestigatorAgent",
+        "LogsMetricsInvestigatorAgent"
+      ],
+      "uncertainty": "Partial evidence — PgBouncer metrics not yet cited; need DBA confirmation on pool saturation."
+    }
+  ]
+}
