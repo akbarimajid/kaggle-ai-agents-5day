@@ -1,0 +1,3 @@
+# Optional ADK dependency for Incident Copilot capstone.
+# Core deterministic tests do not require this package.
+google-adk

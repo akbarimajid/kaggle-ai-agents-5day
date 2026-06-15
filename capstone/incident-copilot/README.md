@@ -15,8 +15,10 @@ Platform engineer / SRE / MLOps engineer on-call for data orchestration and batc
 * Architecture and agent design documentation
 * Mock incident scenarios (`INC-001` … `INC-003`)
 * Fake logs, metrics, Kubernetes events, Airflow status, runbooks, deployment metadata
-* Tool contracts documented; deterministic mock tools implemented (ADK/LLM agents not yet)
+* Tool contracts documented; deterministic mock tools implemented
 * Golden eval answers and scoring rubric
+* Deterministic manual investigator baseline (PR #2)
+* ADK coordinator and specialist topology boundary (PR #3)
 * Coding-agent guidance (`AGENTS.md`)
 
 ## Out of scope (v0)
@@ -47,10 +49,7 @@ User incident report
         → LogsMetricsInvestigatorAgent
         → RunbookAdvisorAgent
     → Sequential reporting stage
-        → evidence collector
-        → diagnosis generator
-        → safety check
-        → IncidentSummaryAgent
+        → SummarySafetyAgent
 ```
 
 Specialist agents are conceptually exposed like `AgentTool` wrappers. State handoff uses keys such as `evidence_bundle`, `diagnosis_draft`, `remediation_plan`, `incident_summary`.
@@ -113,7 +112,7 @@ capstone/incident-copilot/
 ├── README.md
 ├── AGENTS.md
 ├── app/
-│   └── incident_copilot/   # mock tools + eval runner
+│   └── incident_copilot/   # mock tools, eval runner, manual investigator, ADK layer
 ├── tests/
 ├── data/
 │   ├── incidents/
@@ -150,12 +149,44 @@ PYTHONPATH=app python -m incident_copilot.manual_investigator --incident-id INC-
 PYTHONPATH=app python -m incident_copilot.manual_investigator --incident-id INC-001 --output /tmp/inc-001-prediction.json
 ```
 
-Stdlib only. No extra dependencies required.
+Stdlib only. No extra dependencies required for deterministic validation.
+
+## Capstone progression
+
+| PR | Focus |
+|----|-------|
+| #1 | Mock data, tool contracts, eval harness, architecture docs |
+| #2 | Deterministic end-to-end manual investigator (quality gate) |
+| #3 | ADK coordinator and specialist agent topology boundary |
+
+PR #3 adds the Day 1b multi-agent architecture layer beside the deterministic baseline. The manual investigator remains the acceptance gate (54 / 54). Live LLM execution is intentionally not required for tests.
+
+## ADK layer (optional)
+
+The ADK coordinator lives in `adk_agents.py` and `adk_coordinator.py`. It defines specialist investigators, the `IncidentCoordinatorAgent` orchestrator, and the sequential `SummarySafetyAgent` reporting stage.
+
+Offline by default:
+
+```bash
+cd capstone/incident-copilot
+PYTHONPATH=app python -m incident_copilot.adk_coordinator --topology
+PYTHONPATH=app python -m incident_copilot.adk_coordinator --incident-id INC-001
+```
+
+`run_adk_incident_analysis()` defaults to `execution_mode=deterministic`, which delegates to `manual_investigator` without calling a live model.
+
+Optional ADK install (not required for tests):
+
+```bash
+pip install -r requirements-adk.txt
+```
+
+When `google-adk` is installed, `build_incident_coordinator(materialize_adk=True)` can build ADK Agent objects for future live execution. Tests still pass without API keys.
 
 ## Next steps (post-v0)
 
 1. ~~Implement read-only mock tool functions against `data/`~~ (done)
 2. ~~Deterministic manual investigator (`manual_investigator.py`)~~ (done)
-3. Wire ADK agents per `docs/agent-design.md` to replace rule-based diagnosis
-4. ~~Run eval harness against `evals/golden-answers.json`~~ (deterministic scorer + manual investigator done)
+3. ~~ADK coordinator and specialist topology (`adk_coordinator.py`)~~ (done)
+4. Swap deterministic delegate for live ADK agent execution behind the same boundary
 5. Optionally add Loop critic/refiner stage
