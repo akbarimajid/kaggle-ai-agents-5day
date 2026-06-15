@@ -36,7 +36,7 @@ def load_incident(incident_id: str) -> dict:
 
 
 def _format_evidence(source: str, detail: str) -> str:
-    return f"{source} — {detail}"
+    return f"{source} - {detail}"
 
 
 def _investigate_inc_001(incident: dict) -> dict:
@@ -359,7 +359,7 @@ def main(argv: list[str] | None = None) -> int:
         description="Deterministic manual incident investigator (no LLM)"
     )
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--incident-id", help="Investigate a single incident (INC-001 … INC-003)")
+    group.add_argument("--incident-id", help="Investigate a single incident (INC-001 to INC-003)")
     group.add_argument(
         "--all",
         action="store_true",

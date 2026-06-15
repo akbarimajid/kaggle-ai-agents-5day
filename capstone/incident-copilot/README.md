@@ -150,7 +150,7 @@ PYTHONPATH=app python -m incident_copilot.manual_investigator --incident-id INC-
 PYTHONPATH=app python -m incident_copilot.manual_investigator --incident-id INC-001 --output /tmp/inc-001-prediction.json
 ```
 
-Stdlib only — no extra dependencies required.
+Stdlib only. No extra dependencies required.
 
 ## Next steps (post-v0)
 
