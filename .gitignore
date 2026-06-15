@@ -1,0 +1,17 @@
+.env
+.env.*
+*.local
+*.log
+.DS_Store
+node_modules/
+dist/
+build/
+.vite/
+.next/
+.vercel/
+.credentials/
+secrets/
+*.key
+*.pem
+*-service-account.json
+application_default_credentials.json
