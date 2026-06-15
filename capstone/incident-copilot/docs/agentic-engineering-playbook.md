@@ -6,11 +6,14 @@ Source: Day 1 learning, The New SDLC With Vibe Coding, and capstone implementati
 
 ## Purpose
 
-This document defines how the AI Platform Incident Copilot applies the Day 1 lessons from vibe coding, structured AI-assisted coding, and agentic engineering.
+This document defines how the AI Platform Incident Copilot applies the Day 1 lessons from
+vibe coding, structured AI-assisted coding, and agentic engineering.
 
-The capstone uses vibe coding as the development workflow, but the system itself is an agentic engineering project.
+The capstone uses vibe coding as the development workflow, but the system itself is an
+agentic engineering project.
 
-That means the goal is not only to generate code quickly. The goal is to build a reliable, testable, reviewable, and extensible agent system for AI platform operations.
+That means the goal is not only to generate code quickly. The goal is to build a reliable,
+testable, reviewable, and extensible agent system for AI platform operations.
 
 ## Core lesson
 
@@ -26,19 +29,20 @@ The scarce skills are:
 * review discipline
 * safe iteration
 
-For this capstone, that means every agentic feature must be designed around contracts, tests, evals, and human review before it is treated as reliable.
+For this capstone, every agentic feature must be designed around contracts, tests, evals,
+and human review before it is treated as reliable.
 
 ## Vibe coding vs agentic engineering in this project
 
-| Dimension      | Vibe coding behavior           | Agentic engineering behavior in this capstone                                 |
-| -------------- | ------------------------------ | ----------------------------------------------------------------------------- |
-| Intent         | Casual prompt to generate code | Explicit task prompt with scope, constraints, commands, and review gates      |
-| Verification   | "Looks good" manual check      | Unit tests, eval score, output contract validation, hygiene checks            |
-| Code ownership | AI writes, developer skims     | Developer owns architecture, scope, merge decision, and quality bar           |
-| Context        | Chat history only              | Versioned docs, output contracts, mock data, tool contracts, README notes     |
-| Error handling | Paste error back to AI         | Diagnose root cause, constrain fix scope, re-run tests and evals              |
-| Scope          | Fast prototype                 | Production-style learning artifact with public repo quality                   |
-| Risk           | Hidden breakage accepted       | Generated files, secrets, Unicode issues, dependencies, and drift are blocked |
+| Dimension | Vibe coding behavior | Agentic engineering behavior in this capstone |
+| --- | --- | --- |
+| Intent | Casual prompt to generate code | Explicit task prompt with scope, constraints, commands, and review gates |
+| Verification | "Looks good" manual check | Unit tests, eval score, output contract validation, hygiene checks |
+| Code ownership | AI writes, developer skims | Developer owns architecture, scope, merge decision, and quality bar |
+| Context | Chat history only | Versioned docs, output contracts, mock data, tool contracts, README notes |
+| Error handling | Paste error back to AI | Diagnose root cause, constrain fix scope, re-run tests and evals |
+| Scope | Fast prototype | Production-style learning artifact with public repo quality |
+| Risk | Hidden breakage accepted | Generated files, secrets, Unicode issues, dependencies, and drift are blocked |
 
 ## Capstone operating principle
 
@@ -85,7 +89,8 @@ Dynamic context:
 
 Design rule:
 
-Static context should live in versioned repo files. Dynamic context should be loaded at runtime from mock incident data and tools.
+Static context should live in versioned repo files. Dynamic context should be loaded at
+runtime from mock incident data and tools.
 
 ### 2. Factory model
 
@@ -101,7 +106,8 @@ In this project:
 
 Design rule:
 
-Every agent task must include scope boundaries, validation commands, expected outputs, and public-safety checks.
+Every agent task must include scope boundaries, validation commands, expected outputs,
+and public-safety checks.
 
 ### 3. Conductor and orchestrator modes
 
@@ -125,7 +131,8 @@ Orchestrator mode:
 
 Design rule:
 
-Use conductor mode for narrow fixes. Use orchestrator mode for PR-level work with explicit acceptance criteria.
+Use conductor mode for narrow fixes. Use orchestrator mode for PR-level work with explicit
+acceptance criteria.
 
 ### 4. Harness anatomy
 
@@ -198,7 +205,7 @@ Before trusting an LLM, prove that the workflow can be solved deterministically.
 
 ### Stage 3: ADK coordinator and specialist topology
 
-Status: In progress
+Status: Done
 
 Goal:
 
@@ -225,7 +232,8 @@ Status: Future
 
 Goal:
 
-Allow the coordinator and specialists to perform live LLM-backed reasoning behind the same output contract.
+Allow the coordinator and specialists to perform live LLM-backed reasoning behind the same
+output contract.
 
 Required before implementation:
 
@@ -238,7 +246,8 @@ Required before implementation:
 
 Engineering lesson:
 
-Live LLM behavior must be introduced behind a tested boundary, not mixed directly into the baseline.
+Live LLM behavior must be introduced behind a tested boundary, not mixed directly into the
+baseline.
 
 ### Stage 5: Critic/refiner loop
 
@@ -280,7 +289,8 @@ A PR is not merge-ready until it answers:
 
 This capstone should be described as:
 
-An AI-assisted engineering project that builds an AI Platform Incident Copilot using agentic engineering practices.
+An AI-assisted engineering project that builds an AI Platform Incident Copilot using
+agentic engineering practices.
 
 The project demonstrates:
 
@@ -296,4 +306,5 @@ The project demonstrates:
 
 The key message:
 
-I used vibe coding techniques to accelerate development, but I applied agentic engineering discipline to make the result testable, reviewable, and portfolio-grade.
+I used vibe coding techniques to accelerate development, but I applied agentic engineering
+discipline to make the result testable, reviewable, and portfolio-grade.
