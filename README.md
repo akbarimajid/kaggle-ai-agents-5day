@@ -41,6 +41,8 @@ kaggle-ai-agents-5day/
 │   └── README.md
 ├── notes/
 │   ├── day-1-learning-log.md
+│   ├── day-1-new-sdlc-summary.md
+│   ├── day-1-visuals-to-recreate.md
 │   └── day-1b-agent-architectures.md
 └── scratch/
     └── .gitkeep
@@ -49,6 +51,13 @@ kaggle-ai-agents-5day/
 ## Capstone
 
 Course capstone project: **[AI Platform Incident Copilot](capstone/incident-copilot/)** — multi-agent incident investigation using mock Airflow/Kubernetes telemetry (v0: docs, mock data, evals; no deployment).
+
+## Day 1: From Vibe Coding to Agentic Engineering
+
+* [Day 1 SDLC summary](notes/day-1-new-sdlc-summary.md)
+* [Day 1 visuals to recreate](notes/day-1-visuals-to-recreate.md)
+* [Day 1 → capstone mapping](capstone/incident-copilot/docs/day-1-capstone-mapping.md)
+* [Incident copilot output contract](capstone/incident-copilot/docs/output-contract.md)
 
 ## Daily Progress
 

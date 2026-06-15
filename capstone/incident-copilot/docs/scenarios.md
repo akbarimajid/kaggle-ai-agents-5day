@@ -2,6 +2,8 @@
 
 Three mock incidents for evaluation and agent development. All identifiers and systems are fictional.
 
+Each scenario expects a full **output contract**: root cause, confidence, evidence, clarifying questions, safe actions, rollback recommendation, and incident summary. See `evals/golden-answers.json` for golden fields per incident.
+
 ---
 
 ## INC-001: Airflow tasks stuck in queued

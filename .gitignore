@@ -15,3 +15,13 @@ secrets/
 *.pem
 *-service-account.json
 application_default_credentials.json
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Cursor
+.cursor/

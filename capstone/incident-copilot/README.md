@@ -70,8 +70,33 @@ Specialist agents are conceptually exposed like `AgentTool` wrappers. State hand
 ## Evaluation approach
 
 * Three golden scenarios with known root causes
-* `evals/golden-answers.json` defines required evidence, safe/unsafe actions, expected specialists
-* Score dimensions: root cause, evidence quality, action safety, specialist selection, uncertainty handling
+* `evals/golden-answers.json` defines required evidence, safe/unsafe actions, expected specialists, confidence ranges, clarifying questions, rollback guidance, and summary points
+* **Output contract** (per incident response):
+
+  | Field | Description |
+  |-------|-------------|
+  | `root_cause` | Likely root cause with evidence backing |
+  | `confidence` | Calibrated score (0.0–1.0) |
+  | `evidence` | Citations from logs, metrics, k8s, airflow, deployments |
+  | `clarifying_questions` | Questions to reduce ambiguity before acting |
+  | `actions` | Safe next steps only |
+  | `rollback_recommendation` | Rollback or explicit no-rollback guidance |
+  | `incident_summary` | Postmortem-style summary draft |
+
+* Score dimensions (18 points per incident, 54 total across three scenarios):
+
+  | Dimension | Max |
+  |-----------|-----|
+  | root_cause_correct | 3 |
+  | evidence_quality | 3 |
+  | action_safety | 3 |
+  | specialist_selection | 2 |
+  | uncertainty_handling | 1 |
+  | confidence_calibration | 1 |
+  | clarifying_questions_quality | 2 |
+  | rollback_recommendation_quality | 2 |
+  | summary_quality | 1 |
+
 * Evals run **before** full agent implementation to lock acceptance criteria
 
 ## Public repo safety
@@ -87,7 +112,9 @@ Specialist agents are conceptually exposed like `AgentTool` wrappers. State hand
 capstone/incident-copilot/
 ├── README.md
 ├── AGENTS.md
-├── app/                 # future implementation (empty in v0)
+├── app/
+│   └── incident_copilot/   # mock tools + eval runner
+├── tests/
 ├── data/
 │   ├── incidents/
 │   ├── logs/
@@ -101,12 +128,25 @@ capstone/incident-copilot/
 │   ├── tool-contracts.md
 │   └── agent-design.md
 └── evals/
-    └── golden-answers.json
+    ├── golden-answers.json
+    └── example-predictions.json
 ```
+
+## Local validation
+
+From `capstone/incident-copilot`:
+
+```bash
+cd capstone/incident-copilot
+PYTHONPATH=app python -m unittest discover -s tests
+PYTHONPATH=app python -m incident_copilot.eval_runner --predictions evals/example-predictions.json
+```
+
+Stdlib only — no extra dependencies required.
 
 ## Next steps (post-v0)
 
-1. Implement read-only mock tool functions against `data/`
+1. ~~Implement read-only mock tool functions against `data/`~~ (done)
 2. Wire ADK agents per `docs/agent-design.md`
-3. Run eval harness against `evals/golden-answers.json`
+3. ~~Run eval harness against `evals/golden-answers.json`~~ (deterministic scorer done; agent predictions TBD)
 4. Optionally add Loop critic/refiner stage

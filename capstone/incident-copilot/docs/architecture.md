@@ -25,7 +25,8 @@ Sequential reporting stage        ← fixed pipeline (supporting)
         │
         ▼
 Structured incident response
-(citations, root cause, safe actions, summary)
+(likely root cause, confidence, evidence, clarifying questions,
+ safe actions, rollback/no-rollback recommendation, incident summary)
 ```
 
 ### Future stretch (not in v0)
@@ -37,6 +38,24 @@ LoopAgent (max_iterations = N)
 ```
 
 Nested after investigation, before final summary — see [agent-design.md](./agent-design.md).
+
+---
+
+## Output contract (v0)
+
+Each incident response must include:
+
+| Field | Responsibility |
+|-------|----------------|
+| **Likely root cause** | Diagnosis generator — cited, not guessed |
+| **Confidence** | Calibrated 0.0–1.0; must align with evidence depth |
+| **Evidence** | Evidence collector — logs, metrics, k8s, airflow, deployments |
+| **Clarifying questions** | Coordinator or diagnosis stage — reduce ambiguity |
+| **Safe next actions** | Safety check — filtered against unsafe action list |
+| **Rollback recommendation** | Explicit rollback or no-rollback with rationale |
+| **Incident summary** | `IncidentSummaryAgent` — postmortem draft (3–5 key points) |
+
+Eval harness: `evals/golden-answers.json` (max **18** points per incident).
 
 ---
 
