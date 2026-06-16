@@ -192,6 +192,7 @@ Stdlib only. No extra dependencies required for deterministic validation.
 | #1 | Mock data, tool contracts, eval harness, architecture docs |
 | #2 | Deterministic end-to-end manual investigator (quality gate) |
 | #3 | ADK coordinator and specialist agent topology boundary |
+| #6 | Output contract validator |
 | #7 | Versioned agent prompt templates |
 
 PR #3 adds the Day 1b multi-agent architecture layer beside the deterministic baseline.
@@ -229,5 +230,7 @@ build ADK Agent objects for future live execution. Tests still pass without API 
 1. Mock tool functions and data foundation (done)
 2. Deterministic manual investigator (done)
 3. ADK coordinator and specialist topology (done)
-4. Swap deterministic delegate for live ADK agent execution behind the same boundary
-5. Optionally add Loop critic/refiner stage
+4. Output contract validator (done)
+5. Versioned agent prompt templates (done)
+6. Optional live ADK execution behind an explicit flag
+7. Critic/refiner loop for diagnosis quality
