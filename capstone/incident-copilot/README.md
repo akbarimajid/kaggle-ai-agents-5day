@@ -64,6 +64,11 @@ User incident report
 
 Specialist agents are conceptually exposed like `AgentTool` wrappers. State handoff uses keys such as `evidence_bundle`, `diagnosis_draft`, `remediation_plan`, `incident_summary`.
 
+## Prompt templates
+
+Versioned agent prompts for the coordinator, specialists, and summary/safety stage:
+[prompts/README.md](prompts/README.md)
+
 ## Related docs
 
 * [Agentic engineering playbook](docs/agentic-engineering-playbook.md)
@@ -133,6 +138,10 @@ capstone/incident-copilot/
 |-- app/
 |   +-- incident_copilot/
 |-- tests/
+|-- prompts/
+|   |-- README.md
+|   |-- coordinator.md
+|   +-- *-investigator.md, summary-safety.md
 |-- data/
 |   |-- incidents/
 |   |-- logs/
@@ -183,6 +192,8 @@ Stdlib only. No extra dependencies required for deterministic validation.
 | #1 | Mock data, tool contracts, eval harness, architecture docs |
 | #2 | Deterministic end-to-end manual investigator (quality gate) |
 | #3 | ADK coordinator and specialist agent topology boundary |
+| #6 | Output contract validator |
+| #7 | Versioned agent prompt templates |
 
 PR #3 adds the Day 1b multi-agent architecture layer beside the deterministic baseline.
 It defines the agentic boundary only. It does not add production deployment or live LLM
@@ -219,5 +230,7 @@ build ADK Agent objects for future live execution. Tests still pass without API 
 1. Mock tool functions and data foundation (done)
 2. Deterministic manual investigator (done)
 3. ADK coordinator and specialist topology (done)
-4. Swap deterministic delegate for live ADK agent execution behind the same boundary
-5. Optionally add Loop critic/refiner stage
+4. Output contract validator (done)
+5. Versioned agent prompt templates (done)
+6. Optional live ADK execution behind an explicit flag
+7. Critic/refiner loop for diagnosis quality
