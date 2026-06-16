@@ -7,10 +7,10 @@ import json
 import sys
 from typing import Any, Literal
 
-from incident_copilot import adk_agents, manual_investigator
-from incident_copilot.manual_investigator import OUTPUT_CONTRACT_FIELDS
+from incident_copilot import adk_agents, adk_live, manual_investigator
+from incident_copilot import contract_validator
 
-ExecutionMode = Literal["deterministic", "topology_only", "adk_config"]
+ExecutionMode = Literal["deterministic", "topology_only", "adk_config", "live_adk"]
 
 DEFAULT_EXECUTION_MODE: ExecutionMode = "deterministic"
 
@@ -40,7 +40,9 @@ def describe_agent_topology() -> dict[str, Any]:
         ],
         "execution_default": DEFAULT_EXECUTION_MODE,
         "adk_installed": adk_agents.adk_available(),
+        "live_adk_configured": adk_live.is_live_adk_configured(),
         "live_llm_required_for_tests": False,
+        "live_execution_modes": ["live_adk"],
     }
 
 
@@ -77,6 +79,7 @@ def run_adk_incident_analysis(
     - deterministic: delegate to manual_investigator (no live LLM)
     - topology_only: return topology/config only
     - adk_config: build ADK objects but do not execute a live model
+    - live_adk: execute google-adk with configured credentials (explicit opt-in)
     """
     topology = describe_agent_topology()
     result: dict[str, Any] = {
@@ -105,13 +108,25 @@ def run_adk_incident_analysis(
         result["live_model_executed"] = False
         return result
 
+    if execution_mode == "live_adk":
+        live_result = adk_live.run_live_adk_incident_analysis(incident_id)
+        result.update(live_result)
+        return result
+
     raise ValueError(f"Unsupported execution_mode: {execution_mode}")
 
 
 def _validate_prediction_contract(prediction: dict[str, Any]) -> None:
-    missing = [field for field in OUTPUT_CONTRACT_FIELDS if field not in prediction]
-    if missing:
-        raise ValueError(f"Prediction missing output contract fields: {missing}")
+    errors = contract_validator.validate_prediction(prediction)
+    if errors:
+        joined = "; ".join(errors)
+        raise ValueError(f"Prediction failed output contract validation: {joined}")
+
+
+def _normalize_execution_mode(mode: str) -> ExecutionMode:
+    if mode == "live-adk":
+        return "live_adk"
+    return mode  # type: ignore[return-value]
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -129,9 +144,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "--execution-mode",
-        choices=["deterministic", "topology_only", "adk_config"],
+        choices=["deterministic", "topology_only", "adk_config", "live-adk"],
         default=DEFAULT_EXECUTION_MODE,
-        help="Analysis mode (default: deterministic, no live LLM)",
+        help=(
+            "Analysis mode (default: deterministic, no live LLM). "
+            "live-adk is optional and requires google-adk plus credentials."
+        ),
     )
     args = parser.parse_args(argv)
 
@@ -141,10 +159,14 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.incident_id:
-        payload = run_adk_incident_analysis(
-            args.incident_id,
-            execution_mode=args.execution_mode,
-        )
+        try:
+            payload = run_adk_incident_analysis(
+                args.incident_id,
+                execution_mode=_normalize_execution_mode(args.execution_mode),
+            )
+        except adk_live.LiveAdkUnavailableError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 1
         json.dump(payload, sys.stdout, indent=2, default=str)
         sys.stdout.write("\n")
         return 0

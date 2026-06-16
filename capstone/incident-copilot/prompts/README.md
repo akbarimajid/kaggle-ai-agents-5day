@@ -13,6 +13,10 @@ before live LLM execution is introduced.
 Prompts are plain Markdown files in this directory. Update them deliberately and
 re-run tests when changing agent behavior expectations.
 
+Live ADK mode (explicit opt-in via `--execution-mode live-adk`) loads these prompt
+templates when optional `google-adk` and credentials are configured. Tests remain
+offline-safe and do not call live models.
+
 ## Capstone context
 
 This capstone uses **mock data and deterministic tools only**. Tools read from files

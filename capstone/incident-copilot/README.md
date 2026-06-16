@@ -194,6 +194,7 @@ Stdlib only. No extra dependencies required for deterministic validation.
 | #3 | ADK coordinator and specialist agent topology boundary |
 | #6 | Output contract validator |
 | #7 | Versioned agent prompt templates |
+| #8 | Optional live ADK execution behind an explicit flag |
 
 PR #3 adds the Day 1b multi-agent architecture layer beside the deterministic baseline.
 It defines the agentic boundary only. It does not add production deployment or live LLM
@@ -225,6 +226,23 @@ pip install -r requirements-adk.txt
 When `google-adk` is installed, `build_incident_coordinator(materialize_adk=True)` can
 build ADK Agent objects for future live execution. Tests still pass without API keys.
 
+### Optional live ADK execution (explicit opt-in)
+
+Default execution remains deterministic/offline. Live mode is opt-in only:
+
+```bash
+PYTHONPATH=app python -m incident_copilot.adk_coordinator \
+  --incident-id INC-001 --execution-mode live-adk
+```
+
+Live mode requires optional `google-adk` install plus credentials such as
+`GOOGLE_API_KEY` or `GEMINI_API_KEY` (or Vertex AI project/credentials). If ADK or
+credentials are missing, the CLI exits non-zero with a clear error. Live mode does not
+fall back to deterministic execution silently.
+
+Tests do not require live credentials and do not call Gemini or any live model. No
+deployment or cloud integration is added in this capstone phase.
+
 ## Next steps (post-v0)
 
 1. Mock tool functions and data foundation (done)
@@ -232,5 +250,5 @@ build ADK Agent objects for future live execution. Tests still pass without API 
 3. ADK coordinator and specialist topology (done)
 4. Output contract validator (done)
 5. Versioned agent prompt templates (done)
-6. Optional live ADK execution behind an explicit flag
+6. Optional live ADK execution behind an explicit flag (done)
 7. Critic/refiner loop for diagnosis quality
