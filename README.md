@@ -70,7 +70,7 @@ The capstone demonstrates **agentic engineering for AI platform operations**: mu
 
 * [Day 1 SDLC summary](notes/day-1-new-sdlc-summary.md)
 * [Day 1 visuals to recreate](notes/day-1-visuals-to-recreate.md)
-* [Day 1 to capstone mapping](capstone/incident-copilot/docs/day-1-capstone-mapping.md)
+* [Agentic engineering capstone mapping](capstone/incident-copilot/docs/agentic-engineering-capstone-mapping.md)
 * [Incident copilot output contract](capstone/incident-copilot/docs/output-contract.md)
 
 ## Daily Progress
@@ -78,7 +78,7 @@ The capstone demonstrates **agentic engineering for AI platform operations**: mu
 | Day   | Focus                  | Status      |
 | ----- | ---------------------- | ----------- |
 | Day 1 | Introduction and setup | In progress |
-| Day 2 | TBD                    | Not started |
+| Day 2 | [Tools and interoperability](capstone/incident-copilot/docs/agentic-engineering-day-2-tools-interoperability.md) | Documented |
 | Day 3 | TBD                    | Not started |
 | Day 4 | TBD                    | Not started |
 | Day 5 | TBD                    | Not started |

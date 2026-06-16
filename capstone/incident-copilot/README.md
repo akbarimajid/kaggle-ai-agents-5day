@@ -67,6 +67,8 @@ Specialist agents are conceptually exposed like `AgentTool` wrappers. State hand
 ## Related docs
 
 * [Agentic engineering playbook](docs/agentic-engineering-playbook.md)
+* [Agentic engineering capstone mapping](docs/agentic-engineering-capstone-mapping.md) - Day 1 and Day 2 theory to design
+* [Day 2 tools and interoperability](docs/agentic-engineering-day-2-tools-interoperability.md) - concepts and glossary (architecture guidance, not protocol implementation)
 
 ## Mock system layers
 

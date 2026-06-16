@@ -10,7 +10,7 @@ Defines the **AI Platform Incident Copilot** response shape for each investigate
 |---|---|
 | **Purpose** | Confirms the agent understood the alert: service, environment, symptom, time window |
 | **Why it matters** | Prevents investigating the wrong problem; anchors human review |
-| **v0 eval** | *Planned* — not yet a separate scored field; implied in summary quality |
+| **v0 eval** | *Planned*  -  not yet a separate scored field; implied in summary quality |
 | **Prediction key** | `incident_restatement` *(future)* |
 
 ### Likely root cause
@@ -19,16 +19,16 @@ Defines the **AI Platform Incident Copilot** response shape for each investigate
 |---|---|
 | **Purpose** | Primary diagnosis hypothesis backed by evidence |
 | **Why it matters** | Directs on-call action; core capstone deliverable |
-| **v0 eval** | `root_cause_correct` (0–3) — keyword overlap vs golden root cause |
+| **v0 eval** | `root_cause_correct` (0-3)  -  keyword overlap vs golden root cause |
 | **Prediction key** | `root_cause` |
 
 ### Confidence score
 
 | | |
 |---|---|
-| **Purpose** | Calibrated trust signal (0.0–1.0) |
+| **Purpose** | Calibrated trust signal (0.0-1.0) |
 | **Why it matters** | Flags when human review is required |
-| **v0 eval** | `confidence_calibration` (0–1) — must fall in `expected_confidence_range` |
+| **v0 eval** | `confidence_calibration` (0-1)  -  must fall in `expected_confidence_range` |
 | **Prediction key** | `confidence` |
 
 ### Evidence list with source references
@@ -37,7 +37,7 @@ Defines the **AI Platform Incident Copilot** response shape for each investigate
 |---|---|
 | **Purpose** | Grounded citations from logs, metrics, k8s, airflow, deployments |
 | **Why it matters** | Prevents hallucination; supports audit and postmortem |
-| **v0 eval** | `evidence_quality` (0–3) — layer coverage + required evidence hits |
+| **v0 eval** | `evidence_quality` (0-3)  -  layer coverage + required evidence hits |
 | **Prediction key** | `evidence` |
 
 ### Clarifying questions
@@ -46,7 +46,7 @@ Defines the **AI Platform Incident Copilot** response shape for each investigate
 |---|---|
 | **Purpose** | Questions that reduce ambiguity before remediation |
 | **Why it matters** | Acknowledges incomplete context; invites tribal knowledge |
-| **v0 eval** | `clarifying_questions_quality` (0–2) — overlap with golden questions |
+| **v0 eval** | `clarifying_questions_quality` (0-2)  -  overlap with golden questions |
 | **Prediction key** | `clarifying_questions` |
 
 ### Safe next actions
@@ -55,7 +55,7 @@ Defines the **AI Platform Incident Copilot** response shape for each investigate
 |---|---|
 | **Purpose** | Recommended steps that avoid further harm |
 | **Why it matters** | Operational guidance under time pressure |
-| **v0 eval** | `action_safety` (0–3) — acceptable actions present; unsafe actions absent |
+| **v0 eval** | `action_safety` (0-3)  -  acceptable actions present; unsafe actions absent |
 | **Prediction key** | `actions` |
 
 ### Rollback / no-rollback recommendation
@@ -64,7 +64,7 @@ Defines the **AI Platform Incident Copilot** response shape for each investigate
 |---|---|
 | **Purpose** | Explicit deploy rollback guidance or confirmation that rollback is not appropriate |
 | **Why it matters** | Highest-stakes incident decision for deploy-correlated failures |
-| **v0 eval** | `rollback_recommendation_quality` (0–2) — alignment with golden recommendation |
+| **v0 eval** | `rollback_recommendation_quality` (0-2)  -  alignment with golden recommendation |
 | **Prediction key** | `rollback_recommendation` |
 
 ### What not to do
@@ -82,15 +82,15 @@ Defines the **AI Platform Incident Copilot** response shape for each investigate
 |---|---|
 | **Purpose** | Human-readable narrative: timeline, impact, cause, remediation, follow-ups |
 | **Why it matters** | Automates tedious post-incident documentation |
-| **v0 eval** | `summary_quality` (0–1) — overlap with `expected_summary_points` |
+| **v0 eval** | `summary_quality` (0-1)  -  overlap with `expected_summary_points` |
 | **Prediction key** | `incident_summary` |
 
 ## Supporting fields (v0 harness)
 
 | Field | Purpose | v0 eval |
 |-------|---------|---------|
-| `specialists_used` | Which investigator agents were invoked | `specialist_selection` (0–2) |
-| `uncertainty` | Free-text confidence / gap statement | `uncertainty_handling` (0–1) |
+| `specialists_used` | Which investigator agents were invoked | `specialist_selection` (0-2) |
+| `uncertainty` | Free-text confidence / gap statement | `uncertainty_handling` (0-1) |
 
 ## Scoring summary
 
@@ -136,10 +136,10 @@ PYTHONPATH=app python -m incident_copilot.eval_runner --predictions evals/exampl
 * `incident_restatement` as scored field
 * `unsafe_actions_to_avoid` as explicit output (not only via action safety)
 * Loop critic stage before summary (Day 1b stretch pattern)
-* Optional LM-judge layer — v0 uses deterministic scoring only
+* Optional LM-judge layer  -  v0 uses deterministic scoring only
 
 ## Related
 
 * [golden-answers.json](../evals/golden-answers.json)
 * [example-predictions.json](../evals/example-predictions.json)
-* [day-1-capstone-mapping.md](./day-1-capstone-mapping.md)
+* [agentic-engineering-capstone-mapping.md](./agentic-engineering-capstone-mapping.md)

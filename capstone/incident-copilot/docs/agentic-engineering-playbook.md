@@ -312,3 +312,12 @@ The key message:
 
 I used vibe coding techniques to accelerate development, but I applied agentic
 engineering discipline to make the result testable, reviewable, and portfolio-grade.
+
+## Related docs
+
+* [agentic-engineering-capstone-mapping.md](./agentic-engineering-capstone-mapping.md) - Day 1 and Day 2 theory to capstone mapping
+* [agentic-engineering-day-2-tools-interoperability.md](./agentic-engineering-day-2-tools-interoperability.md) - Day 2 concepts and glossary
+* [output-contract.md](./output-contract.md) - response fields and eval mapping
+* [architecture.md](./architecture.md) - multi-agent design
+* [notes/day-1-new-sdlc-summary.md](../../notes/day-1-new-sdlc-summary.md) - Day 1 concepts
+* [notes/day-1b-agent-architectures.md](../../notes/day-1b-agent-architectures.md) - ADK workflow patterns
