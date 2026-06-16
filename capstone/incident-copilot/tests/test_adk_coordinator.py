@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import io
 import json
+import os
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
 from unittest import mock
@@ -90,14 +91,78 @@ class AdkCoordinatorTests(unittest.TestCase):
         self.assertEqual(payload["coordinator"]["name"], adk_agents.COORDINATOR_NAME)
 
     def test_topology_reports_live_adk_configuration_state(self) -> None:
-        topology = adk_coordinator.describe_agent_topology()
-        self.assertIn("live_adk_configured", topology)
-        self.assertIn("live_adk", topology["live_execution_modes"])
-        self.assertFalse(topology["live_adk_configured"])
+        with mock.patch(
+            "incident_copilot.adk_coordinator.adk_live.is_live_adk_configured",
+            return_value=False,
+        ):
+            topology = adk_coordinator.describe_agent_topology()
+            self.assertIn("live_adk_configured", topology)
+            self.assertIn("live_adk", topology["live_execution_modes"])
+            self.assertFalse(topology["live_adk_configured"])
 
-    def test_is_live_adk_configured_false_without_optional_dependency(self) -> None:
-        self.assertFalse(adk_live.is_live_adk_configured())
-        self.assertIsNotNone(adk_live.get_live_adk_unavailability_reason())
+        with mock.patch(
+            "incident_copilot.adk_coordinator.adk_live.is_live_adk_configured",
+            return_value=True,
+        ):
+            topology = adk_coordinator.describe_agent_topology()
+            self.assertTrue(topology["live_adk_configured"])
+
+    def test_is_live_adk_configured_reflects_unavailability_reason(self) -> None:
+        with mock.patch(
+            "incident_copilot.adk_live.get_live_adk_unavailability_reason",
+            return_value="test unavailable",
+        ):
+            self.assertFalse(adk_live.is_live_adk_configured())
+            self.assertEqual(
+                adk_live.get_live_adk_unavailability_reason(),
+                "test unavailable",
+            )
+
+        with mock.patch(
+            "incident_copilot.adk_live.get_live_adk_unavailability_reason",
+            return_value=None,
+        ):
+            self.assertTrue(adk_live.is_live_adk_configured())
+
+    def test_is_live_adk_configured_false_when_adk_missing(self) -> None:
+        with mock.patch(
+            "incident_copilot.adk_live.adk_agents.adk_available",
+            return_value=False,
+        ):
+            reason = adk_live.get_live_adk_unavailability_reason()
+            self.assertIsNotNone(reason)
+            self.assertIn("google-adk", reason or "")
+            self.assertFalse(adk_live.is_live_adk_configured())
+
+    def test_is_live_adk_configured_false_when_credentials_missing(self) -> None:
+        with mock.patch(
+            "incident_copilot.adk_live.adk_agents.adk_available",
+            return_value=True,
+        ):
+            with mock.patch.dict(os.environ, {}, clear=True):
+                reason = adk_live.get_live_adk_unavailability_reason()
+                self.assertIsNotNone(reason)
+                self.assertIn("credentials", (reason or "").casefold())
+                self.assertFalse(adk_live.is_live_adk_configured())
+
+    def test_deterministic_default_never_calls_live_even_when_configured(self) -> None:
+        with mock.patch(
+            "incident_copilot.adk_coordinator.adk_live.is_live_adk_configured",
+            return_value=True,
+        ), mock.patch(
+            "incident_copilot.adk_coordinator.adk_live.run_live_adk_incident_analysis"
+        ) as live_mock:
+            adk_coordinator.run_adk_incident_analysis("INC-001")
+            live_mock.assert_not_called()
+
+        with mock.patch(
+            "incident_copilot.adk_coordinator.adk_live.get_live_adk_unavailability_reason",
+            return_value=None,
+        ), mock.patch(
+            "incident_copilot.adk_coordinator.adk_live.run_live_adk_incident_analysis"
+        ) as live_mock:
+            adk_coordinator.run_adk_incident_analysis("INC-001")
+            live_mock.assert_not_called()
 
     def test_live_mode_is_opt_in(self) -> None:
         with mock.patch(
@@ -119,13 +184,16 @@ class AdkCoordinatorTests(unittest.TestCase):
             live_mock.assert_called_once_with("INC-001")
 
     def test_live_mode_unavailable_raises_controlled_error(self) -> None:
-        with self.assertRaises(adk_live.LiveAdkUnavailableError) as ctx:
-            adk_live.run_live_adk_incident_analysis("INC-001")
-        message = str(ctx.exception).casefold()
-        self.assertTrue(
-            "google-adk" in message or "credentials" in message,
-            msg=str(ctx.exception),
-        )
+        with mock.patch(
+            "incident_copilot.adk_live.get_live_adk_unavailability_reason",
+            return_value="test unavailable",
+        ), mock.patch(
+            "incident_copilot.adk_live._execute_live_adk_pipeline"
+        ) as pipeline_mock:
+            with self.assertRaises(adk_live.LiveAdkUnavailableError) as ctx:
+                adk_live.run_live_adk_incident_analysis("INC-001")
+            self.assertEqual(str(ctx.exception), "test unavailable")
+            pipeline_mock.assert_not_called()
 
     def test_cli_default_incident_analysis_is_deterministic(self) -> None:
         buffer = io.StringIO()
@@ -147,15 +215,17 @@ class AdkCoordinatorTests(unittest.TestCase):
         self.assertEqual(payload["execution_mode"], "deterministic")
 
     def test_cli_live_adk_unavailable_exits_nonzero(self) -> None:
-        stderr = io.StringIO()
-        with redirect_stderr(stderr):
-            code = adk_coordinator.main(
-                ["--incident-id", "INC-001", "--execution-mode", "live-adk"]
-            )
-        self.assertEqual(code, 1)
-        message = stderr.getvalue().casefold()
-        self.assertIn("error:", message)
-        self.assertTrue("google-adk" in message or "credentials" in message)
+        with mock.patch(
+            "incident_copilot.adk_coordinator.adk_live.run_live_adk_incident_analysis",
+            side_effect=adk_live.LiveAdkUnavailableError("test unavailable"),
+        ):
+            stderr = io.StringIO()
+            with redirect_stderr(stderr):
+                code = adk_coordinator.main(
+                    ["--incident-id", "INC-001", "--execution-mode", "live-adk"]
+                )
+            self.assertEqual(code, 1)
+            self.assertIn("error: test unavailable", stderr.getvalue())
 
     def test_deterministic_prediction_passes_contract_validator(self) -> None:
         result = adk_coordinator.run_adk_incident_analysis("INC-002")
