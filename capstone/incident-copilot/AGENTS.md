@@ -46,3 +46,5 @@ Instructions for coding agents working in this capstone directory.
 * Cloud Run / GCP deployment
 * Live incident paging integrations
 * Auto-remediation or write operations against infrastructure
+
+* When a task involves external tools, agents, UI generation, or payment-like actions, follow the protocol-selection guidance in `capstone/incident-copilot/docs/agentic-engineering-day-2-tools-interoperability.md`.
