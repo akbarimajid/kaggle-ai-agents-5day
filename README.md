@@ -64,6 +64,9 @@ The capstone demonstrates **agentic engineering for AI platform operations**: mu
 
 **Project:** [AI Platform Incident Copilot](capstone/incident-copilot/)
 
+**Demo:** [Walkthrough](capstone/incident-copilot/docs/demo-walkthrough.md) |
+[Learning summary](capstone/incident-copilot/docs/learning-summary.md)
+
 **Career alignment:** AI platform engineering, MLOps, DevOps/SRE, and GenAI platform roles.
 
 ## Day 1: From Vibe Coding to Agentic Engineering
