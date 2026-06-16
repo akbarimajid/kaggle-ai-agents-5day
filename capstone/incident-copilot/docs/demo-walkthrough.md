@@ -15,7 +15,8 @@ The demo shows how the capstone works end-to-end:
    deterministic baseline.
 
 Everything runs offline with stdlib Python. The goal is learning and verification, not
-production incident response.
+production incident response. For a visual overview of the pipeline, see
+[agent-engineering-workflow.md](agent-engineering-workflow.md).
 
 ## Prerequisites
 
@@ -322,6 +323,7 @@ Only intentional doc or code changes should appear.
 ## Related reading
 
 * [Learning summary](learning-summary.md) - personal takeaways from building the capstone
+* [Agent engineering workflow](agent-engineering-workflow.md)
 * [Agentic engineering playbook](agentic-engineering-playbook.md)
 * [Output contract](output-contract.md)
 * [README](../README.md) - scope, architecture summary, and capstone progression

@@ -25,6 +25,7 @@ trusting any live model.
 * Deterministic critic/refiner quality gate (offline, no live LLM)
 
 The runnable demo path is documented in [demo-walkthrough.md](demo-walkthrough.md).
+See also the [agent engineering workflow](agent-engineering-workflow.md) diagram.
 
 ## How the system works
 

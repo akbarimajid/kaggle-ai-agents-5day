@@ -50,6 +50,7 @@ See:
 
 * [Demo walkthrough](docs/demo-walkthrough.md)
 * [Learning summary](docs/learning-summary.md)
+* [Agent engineering workflow](docs/agent-engineering-workflow.md)
 
 ## Out of scope (v0)
 
