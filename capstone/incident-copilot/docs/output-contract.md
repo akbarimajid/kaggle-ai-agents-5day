@@ -142,4 +142,4 @@ PYTHONPATH=app python -m incident_copilot.eval_runner --predictions evals/exampl
 
 * [golden-answers.json](../evals/golden-answers.json)
 * [example-predictions.json](../evals/example-predictions.json)
-* [day-1-capstone-mapping.md](./day-1-capstone-mapping.md)
+* [agentic-engineering-capstone-mapping.md](./agentic-engineering-capstone-mapping.md)

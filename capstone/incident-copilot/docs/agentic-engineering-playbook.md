@@ -308,12 +308,11 @@ The project demonstrates:
 * MLOps and SRE-oriented workflows
 * readiness for GenAI platform engineering roles
 
-## Related references
-
-* [Day 2: Agent Tools and Interoperability](./agentic-engineering-day-2-tools-interoperability.md): concept brief and glossary for MCP, Skills, A2A, A2UI, AP2, UCP, agent cards, registries, and payment mandates.
 ## Related docs
+
+* [agentic-engineering-capstone-mapping.md](./agentic-engineering-capstone-mapping.md) - Day 1 and Day 2 theory to capstone mapping
+* [agentic-engineering-day-2-tools-interoperability.md](./agentic-engineering-day-2-tools-interoperability.md) - Day 2 concepts and glossary
 * [output-contract.md](./output-contract.md) - response fields and eval mapping
 * [architecture.md](./architecture.md) - multi-agent design
-* [agentic-engineering-day-2-tools-interoperability.md](./agentic-engineering-day-2-tools-interoperability.md) - Day 2 concepts and glossary
 * [notes/day-1-new-sdlc-summary.md](../../notes/day-1-new-sdlc-summary.md) - Day 1 concepts
 * [notes/day-1b-agent-architectures.md](../../notes/day-1b-agent-architectures.md) - ADK workflow patterns

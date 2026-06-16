@@ -14,8 +14,8 @@ Useful diagrams from the Day 1 paper to **recreate yourself** (Excalidraw, Merma
 
 Original Mermaid adaptations for [AI Platform Incident Copilot](../capstone/incident-copilot/) live in:
 
-* [day-1-capstone-mapping.md](../capstone/incident-copilot/docs/day-1-capstone-mapping.md) — theory → design
-* [architecture.md](../capstone/incident-copilot/docs/architecture.md) — agent flow
+* [agentic-engineering-capstone-mapping.md](../capstone/incident-copilot/docs/agentic-engineering-capstone-mapping.md) - theory to design
+* [architecture.md](../capstone/incident-copilot/docs/architecture.md) - agent flow
 
 ## Public repo note
 
