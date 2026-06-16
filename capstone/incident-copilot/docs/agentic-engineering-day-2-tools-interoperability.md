@@ -2,17 +2,25 @@
 
 ## Purpose
 
-This document summarizes the key concepts from the Day 2 white paper, Agent Tools and Interoperability, and explains how they should influence our agentic engineering work.
+This document summarizes the key concepts from the Day 2 white paper, Agent Tools and
+Interoperability, and explains how they should influence our agentic engineering work.
 
-The main idea is simple: agentic systems should not be built as isolated prompt-driven scripts with custom wrappers for every tool, API, UI, or payment flow. They should be designed around standard interoperability layers.
+The main idea is simple: agentic systems should not be built as isolated prompt-driven scripts
+with custom wrappers for every tool, API, UI, or payment flow. They should be designed around
+standard interoperability layers.
 
-For our work, this means we should treat MCP, Skills, A2A, A2UI, AP2, and UCP as architectural concepts that help us decide where responsibilities belong, what should be standardized, and where we need safety boundaries.
+For our work, this means we should treat MCP, Skills, A2A, A2UI, AP2, and UCP as architectural
+concepts that help us decide where responsibilities belong, what should be standardized, and
+where we need safety boundaries.
 
 ## Core Thesis
 
-Agentic engineering moves developers from writing every line of implementation manually to orchestrating systems that can plan, call tools, collaborate, generate interfaces, and eventually execute commercial actions.
+Agentic engineering moves developers from writing every line of implementation manually to
+orchestrating systems that can plan, call tools, collaborate, generate interfaces, and
+eventually execute commercial actions.
 
-Without standards, every integration becomes a custom one-off connection. That creates fragility, security risk, duplicated work, and long-term maintenance cost.
+Without standards, every integration becomes a custom one-off connection. That creates
+fragility, security risk, duplicated work, and long-term maintenance cost.
 
 With standards, agents become easier to connect, govern, debug, and reuse.
 
@@ -33,7 +41,8 @@ Examples:
 * Inspect logs
 * Fetch data from a known API
 
-MCP is best for structured, predictable tool calls where the agent sends inputs and receives outputs.
+MCP is best for structured, predictable tool calls where the agent sends inputs and receives
+outputs.
 
 Default rule:
 
@@ -56,11 +65,13 @@ Examples:
 * Security review checklist
 * Release verification procedure
 
-Skills are not external services. They are operational instructions and local scripts that make agent behavior more consistent.
+Skills are not external services. They are operational instructions and local scripts that make
+agent behavior more consistent.
 
 ### A2A: Agent-to-Agent Collaboration
 
-Use A2A-style thinking when the work is not just a tool call, but a responsibility that another specialist agent should own.
+Use A2A-style thinking when the work is not just a tool call, but a responsibility that another
+specialist agent should own.
 
 A tool gives a result. A specialist agent takes responsibility.
 
@@ -79,7 +90,8 @@ Example:
 * A cloud-cost specialist agent investigates infrastructure spend and proposes savings.
 * A compliance specialist agent checks whether a workflow violates policy.
 
-Do not use A2A just because something sounds advanced. If the task is bounded and deterministic, use a tool or Skill instead.
+Do not use A2A just because something sounds advanced. If the task is bounded and deterministic,
+use a tool or Skill instead.
 
 ### Agent Card: Agent Identity and Contract
 
@@ -95,7 +107,8 @@ It should describe:
 * What security and compliance boundaries apply
 * What it explicitly does not do
 
-For our work, an Agent Card can be a lightweight markdown or JSON document before we implement any formal protocol.
+For our work, an Agent Card can be a lightweight markdown or JSON document before we implement
+any formal protocol.
 
 ### Agent Registry: Discoverable Agents
 
@@ -106,13 +119,15 @@ There are two useful mental models:
 * Public registry: external marketplace of agents
 * Private registry: internal catalog of approved agents
 
-For our repository, we do not need a real registry yet. But we should keep our agent definitions discoverable through docs, issue templates, and clear task ownership.
+For our repository, we do not need a real registry yet. But we should keep our agent definitions
+discoverable through docs, issue templates, and clear task ownership.
 
 ### A2UI: Agent-to-UI Interoperability
 
 A2UI is about letting agents describe user interfaces safely.
 
-The key point is that agents should not generate arbitrary executable UI code. Instead, they should request trusted UI components from a known catalog.
+The key point is that agents should not generate arbitrary executable UI code. Instead, they
+should request trusted UI components from a known catalog.
 
 The renderer owns the actual implementation. The agent only describes intent.
 
@@ -124,7 +139,8 @@ Examples:
 * Show a confirmation form
 * Present a dashboard using trusted components
 
-For our work, A2UI is useful as a future direction for incident dashboards and agent-generated reports. For now, prefer structured JSON plus markdown unless interactive UI clearly adds value.
+For our work, A2UI is useful as a future direction for incident dashboards and agent-generated
+reports. For now, prefer structured JSON plus markdown unless interactive UI clearly adds value.
 
 ### UCP: Universal Commerce Protocol
 
@@ -172,7 +188,8 @@ Examples:
 * Trigger paid agent calls
 * Purchase a marketplace agent
 
-No agent should perform financial actions without explicit approval, clear constraints, audit logs, and rollback or stop conditions.
+No agent should perform financial actions without explicit approval, clear constraints, audit
+logs, and rollback or stop conditions.
 
 ## Architecture Decision Rules
 
@@ -204,9 +221,9 @@ If the task needs judgment, follow-up, state, or ownership, treat it as agent co
 
 Example:
 
-* “Investigate this incident and coordinate next steps”
-* “Review this architecture and challenge the assumptions”
-* “Act as a cost-optimization specialist”
+* "Investigate this incident and coordinate next steps"
+* "Review this architecture and challenge the assumptions"
+* "Act as a cost-optimization specialist"
 
 ### Rule 4: Human-facing interactive output means A2UI
 
@@ -221,7 +238,8 @@ Example:
 
 ### Rule 5: Financial action means AP2/UCP-level guardrails
 
-If the agent can spend money or create financial obligation, require human approval and strict constraints.
+If the agent can spend money or create financial obligation, require human approval and strict
+constraints.
 
 Example:
 
@@ -263,7 +281,8 @@ This reduces integration debt and avoids maintaining fragile one-off connections
 
 ## Practical Application to This Repository
 
-For this repository, we should treat Day 2 as architecture guidance, not as a requirement to implement every protocol immediately.
+For this repository, we should treat Day 2 as architecture guidance, not as a requirement to
+implement every protocol immediately.
 
 Near-term actions:
 
@@ -272,28 +291,33 @@ Near-term actions:
 * Document any specialist agent with a lightweight Agent Card.
 * Keep tool access scoped and auditable.
 * Prefer structured outputs over free-form outputs where possible.
-* Do not implement agent payments or autonomous commerce unless the product scope explicitly requires it.
+* Do not implement agent payments or autonomous commerce unless the product scope explicitly
+  requires it.
 
 Future-facing actions:
 
 * Explore MCP for safe tool integrations.
 * Explore A2A if we split responsibilities across specialist agents.
 * Explore A2UI if we need interactive incident or cost dashboards.
-* Explore AP2/UCP only if agents need to buy services, trigger paid resources, or interact with commerce systems.
+* Explore AP2/UCP only if agents need to buy services, trigger paid resources, or interact with
+  commerce systems.
 
 ## Glossary
 
 ### Agent
 
-A system that combines a model, instructions, tools, memory or context, and an execution harness to pursue a goal.
+A system that combines a model, instructions, tools, memory or context, and an execution harness
+to pursue a goal.
 
 ### Harness
 
-The runtime environment around the model. It manages tools, context, execution, permissions, and interaction with external systems.
+The runtime environment around the model. It manages tools, context, execution, permissions, and
+interaction with external systems.
 
 ### MCP
 
-Model Context Protocol. A standard way for agents and models to connect to tools, filesystems, databases, APIs, and other external capabilities.
+Model Context Protocol. A standard way for agents and models to connect to tools, filesystems,
+databases, APIs, and other external capabilities.
 
 ### MCP Server
 
@@ -301,31 +325,38 @@ A server that exposes tools or resources through the MCP protocol.
 
 ### MCP Client
 
-The client inside an agent host that connects to MCP servers and makes their tools available to the agent.
+The client inside an agent host that connects to MCP servers and makes their tools available to
+the agent.
 
 ### Tool
 
-A bounded callable capability. It usually accepts structured input and returns structured output.
+A bounded callable capability. It usually accepts structured input and returns structured
+output.
 
 ### Skill
 
-A repeatable playbook, instruction set, or script that teaches an agent how to perform a workflow consistently.
+A repeatable playbook, instruction set, or script that teaches an agent how to perform a
+workflow consistently.
 
 ### A2A
 
-Agent-to-Agent protocol. A standard communication layer that allows agents to discover, communicate, delegate, and collaborate with other agents.
+Agent-to-Agent protocol. A standard communication layer that allows agents to discover,
+communicate, delegate, and collaborate with other agents.
 
 ### Specialist Agent
 
-An agent focused on a specific domain or responsibility, such as security, billing, compliance, cloud cost, or incident response.
+An agent focused on a specific domain or responsibility, such as security, billing, compliance,
+cloud cost, or incident response.
 
 ### Orchestrator
 
-The central agent or system that understands the user goal, coordinates workflow, and delegates work to tools or specialist agents.
+The central agent or system that understands the user goal, coordinates workflow, and delegates
+work to tools or specialist agents.
 
 ### Agent Card
 
-A machine-readable profile for an agent. It describes the agent’s capabilities, inputs, outputs, permissions, policies, and interaction schema.
+A machine-readable profile for an agent. It describes the agent's capabilities, inputs, outputs,
+permissions, policies, and interaction schema.
 
 ### Agent Registry
 
@@ -333,7 +364,8 @@ A catalog where agents can be discovered, evaluated, and connected.
 
 ### A2UI
 
-Agent-to-UI interoperability. A standard approach where agents describe user interface intent using trusted components instead of generating arbitrary executable UI code.
+Agent-to-UI interoperability. A standard approach where agents describe user interface intent
+using trusted components instead of generating arbitrary executable UI code.
 
 ### Generative UI
 
@@ -341,7 +373,8 @@ A UI generated dynamically based on user intent and context.
 
 ### Component Catalog
 
-The trusted set of UI components an agent is allowed to request. The client renders these components safely.
+The trusted set of UI components an agent is allowed to request. The client renders these
+components safely.
 
 ### Canvas
 
@@ -349,7 +382,8 @@ A persistent interactive workspace where the user and agent can both update cont
 
 ### UCP
 
-Universal Commerce Protocol. A protocol for product discovery, catalog access, cart creation, order preparation, and commerce workflows.
+Universal Commerce Protocol. A protocol for product discovery, catalog access, cart creation,
+order preparation, and commerce workflows.
 
 ### AP2
 
@@ -357,7 +391,8 @@ Agent Payments Protocol. A protocol for secure, authorized, auditable agent paym
 
 ### Mandate
 
-A human-approved payment or action constraint. It defines what an agent is allowed to do, how much it can spend, where it can spend, and under what conditions.
+A human-approved payment or action constraint. It defines what an agent is allowed to do, how
+much it can spend, where it can spend, and under what conditions.
 
 ### Human-in-the-Loop
 
@@ -365,19 +400,23 @@ A safety pattern where a human must review or approve sensitive actions before e
 
 ### Least Privilege
 
-The principle that an agent or tool should receive only the minimum access required to complete the task.
+The principle that an agent or tool should receive only the minimum access required to complete
+the task.
 
 ### Read-Only by Default
 
-A safety principle where agents can inspect data but cannot modify systems unless write access is explicitly approved.
+A safety principle where agents can inspect data but cannot modify systems unless write access
+is explicitly approved.
 
 ### Integration Debt
 
-The long-term cost created by custom one-off integrations, brittle wrappers, hardcoded payloads, and bespoke API handling.
+The long-term cost created by custom one-off integrations, brittle wrappers, hardcoded payloads,
+and bespoke API handling.
 
 ### Build vs Consume
 
-The decision of whether to build a custom capability or consume an existing trusted protocol, tool, Skill, or specialist agent.
+The decision of whether to build a custom capability or consume an existing trusted protocol,
+tool, Skill, or specialist agent.
 
 ## Final Takeaway
 
@@ -392,4 +431,5 @@ The useful lesson is architectural discipline:
 * Financial actions should require mandates.
 * Security and auditability must be built into the harness from the beginning.
 
-For our work, this means we should keep building a small, disciplined agentic engineering system that is protocol-shaped, auditable, and easy to evolve.
+For our work, this means we should keep building a small, disciplined agentic engineering system
+that is protocol-shaped, auditable, and easy to evolve.

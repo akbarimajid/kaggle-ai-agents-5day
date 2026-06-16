@@ -308,6 +308,11 @@ The project demonstrates:
 * MLOps and SRE-oriented workflows
 * readiness for GenAI platform engineering roles
 
+The key message:
+
+I used vibe coding techniques to accelerate development, but I applied agentic
+engineering discipline to make the result testable, reviewable, and portfolio-grade.
+
 ## Related docs
 
 * [agentic-engineering-capstone-mapping.md](./agentic-engineering-capstone-mapping.md) - Day 1 and Day 2 theory to capstone mapping
