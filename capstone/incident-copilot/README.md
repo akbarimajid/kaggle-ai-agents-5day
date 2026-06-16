@@ -29,6 +29,28 @@ workloads.
 * ADK coordinator and specialist topology boundary (PR #3)
 * Coding-agent guidance (`AGENTS.md`)
 
+## Quick demo
+
+Run the deterministic end-to-end flow locally:
+
+```bash
+cd capstone/incident-copilot
+PYTHONPATH=app python -m unittest discover -s tests
+PYTHONPATH=app python -m incident_copilot.manual_investigator --all \
+  --output evals/manual-investigator-predictions.json
+PYTHONPATH=app python -m incident_copilot.contract_validator \
+  --predictions evals/manual-investigator-predictions.json
+PYTHONPATH=app python -m incident_copilot.eval_runner \
+  --predictions evals/manual-investigator-predictions.json
+PYTHONPATH=app python -m incident_copilot.critic_refiner \
+  --predictions evals/manual-investigator-predictions.json
+```
+
+See:
+
+* [Demo walkthrough](docs/demo-walkthrough.md)
+* [Learning summary](docs/learning-summary.md)
+
 ## Out of scope (v0)
 
 * Live Airflow, Kubernetes, or cloud API integrations
