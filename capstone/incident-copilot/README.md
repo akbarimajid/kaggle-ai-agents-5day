@@ -34,7 +34,7 @@ workloads.
 * Live Airflow, Kubernetes, or cloud API integrations
 * Real credentials, billing, or deployment
 * Full application UI or production auth
-* Loop-based critic/refiner workflow (documented as future stretch only)
+* Loop-based critic/refiner workflow (deterministic offline quality gate; see below)
 * Automated remediation execution
 * Live LLM execution in tests (PR #3 adds topology only)
 
@@ -44,7 +44,7 @@ workloads.
 | --- | --- |
 | **LLM orchestrator** (primary) | `IncidentCoordinatorAgent` selects specialists from symptoms |
 | **Sequential** (supporting) | Fixed pipeline: evidence -> diagnosis -> remediation -> summary |
-| **Loop** (future) | `SafetyCriticAgent` + refiner until approved or `max_iterations` |
+| **Loop** (quality gate) | Deterministic `critic_refiner` reviews diagnosis before final output |
 
 See [notes/day-1b-agent-architectures.md](../../notes/day-1b-agent-architectures.md)
 for course context.
@@ -169,7 +169,11 @@ cd capstone/incident-copilot
 PYTHONPATH=app python -m unittest discover -s tests
 PYTHONPATH=app python -m incident_copilot.manual_investigator --all \
   --output evals/manual-investigator-predictions.json
+PYTHONPATH=app python -m incident_copilot.contract_validator \
+  --predictions evals/manual-investigator-predictions.json
 PYTHONPATH=app python -m incident_copilot.eval_runner \
+  --predictions evals/manual-investigator-predictions.json
+PYTHONPATH=app python -m incident_copilot.critic_refiner \
   --predictions evals/manual-investigator-predictions.json
 PYTHONPATH=app python -m incident_copilot.adk_coordinator --topology
 PYTHONPATH=app python -m incident_copilot.adk_coordinator --incident-id INC-001
@@ -195,6 +199,7 @@ Stdlib only. No extra dependencies required for deterministic validation.
 | #6 | Output contract validator |
 | #7 | Versioned agent prompt templates |
 | #8 | Optional live ADK execution behind an explicit flag |
+| #9 | Deterministic critic/refiner quality gate |
 
 PR #3 adds the Day 1b multi-agent architecture layer beside the deterministic baseline.
 It defines the agentic boundary only. It does not add production deployment or live LLM
@@ -243,6 +248,29 @@ fall back to deterministic execution silently.
 Tests do not require live credentials and do not call Gemini or any live model. No
 deployment or cloud integration is added in this capstone phase.
 
+## Critic/refiner quality gate (offline-safe)
+
+`critic_refiner.py` adds a deterministic verification stage before final output. It is a
+quality gate, not autonomous remediation: it does not call live LLMs, mutate
+infrastructure, or invent new evidence.
+
+Checks include output contract validity, evidence citations, root-cause support,
+action safety, rollback guidance, clarifying questions when uncertainty is high,
+confidence consistency, and specialist coverage. The bounded loop defaults to
+`max_iterations=1` and terminates deterministically.
+
+The manual investigator remains the acceptance gate (54 / 54). Critic/refiner approval
+is additive quality signal; default coordinator behavior is unchanged unless
+`--with-critic` is passed.
+
+```bash
+cd capstone/incident-copilot
+PYTHONPATH=app python -m incident_copilot.critic_refiner \
+  --predictions evals/manual-investigator-predictions.json
+PYTHONPATH=app python -m incident_copilot.adk_coordinator \
+  --incident-id INC-001 --with-critic
+```
+
 ## Next steps (post-v0)
 
 1. Mock tool functions and data foundation (done)
@@ -251,4 +279,4 @@ deployment or cloud integration is added in this capstone phase.
 4. Output contract validator (done)
 5. Versioned agent prompt templates (done)
 6. Optional live ADK execution behind an explicit flag (done)
-7. Critic/refiner loop for diagnosis quality
+7. Critic/refiner loop for diagnosis quality (done — deterministic, offline-safe)

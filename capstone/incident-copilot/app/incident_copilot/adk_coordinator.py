@@ -7,7 +7,7 @@ import json
 import sys
 from typing import Any, Literal
 
-from incident_copilot import adk_agents, adk_live, manual_investigator
+from incident_copilot import adk_agents, adk_live, critic_refiner, manual_investigator
 from incident_copilot import contract_validator
 
 ExecutionMode = Literal["deterministic", "topology_only", "adk_config", "live_adk"]
@@ -71,6 +71,7 @@ def run_adk_incident_analysis(
     incident_id: str,
     *,
     execution_mode: ExecutionMode = DEFAULT_EXECUTION_MODE,
+    with_critic: bool = False,
 ) -> dict[str, Any]:
     """
     Run incident analysis through the ADK coordinator boundary.
@@ -96,6 +97,8 @@ def run_adk_incident_analysis(
         _validate_prediction_contract(prediction)
         result["prediction"] = prediction
         result["delegated_to"] = "manual_investigator"
+        if with_critic:
+            result["critic_report"] = critic_refiner.run_critic_refiner(prediction)
         return result
 
     if execution_mode == "adk_config":
@@ -151,6 +154,13 @@ def main(argv: list[str] | None = None) -> int:
             "live-adk is optional and requires google-adk plus credentials."
         ),
     )
+    parser.add_argument(
+        "--with-critic",
+        action="store_true",
+        help=(
+            "Attach deterministic critic/refiner quality report (does not change prediction)"
+        ),
+    )
     args = parser.parse_args(argv)
 
     if args.topology:
@@ -163,6 +173,7 @@ def main(argv: list[str] | None = None) -> int:
             payload = run_adk_incident_analysis(
                 args.incident_id,
                 execution_mode=_normalize_execution_mode(args.execution_mode),
+                with_critic=args.with_critic,
             )
         except adk_live.LiveAdkUnavailableError as exc:
             print(f"error: {exc}", file=sys.stderr)

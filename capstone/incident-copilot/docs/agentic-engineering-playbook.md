@@ -254,7 +254,7 @@ the baseline.
 
 ### Stage 5: Critic/refiner loop
 
-Status: Future
+Status: Done (deterministic, offline-safe)
 
 Goal:
 
@@ -268,6 +268,14 @@ The critic should check:
 * missing clarifying questions
 * whether recommended actions are safe
 * whether confidence is justified
+
+Implementation:
+
+* `critic_refiner.py` — deterministic `critique_prediction`, `refine_prediction`,
+  and bounded `run_critic_refiner(max_iterations=1)` (no live LLM)
+* Optional `--with-critic` on `adk_coordinator` attaches a quality report without
+  changing the default prediction
+* Manual investigator (54 / 54) remains the acceptance gate
 
 Engineering lesson:
 

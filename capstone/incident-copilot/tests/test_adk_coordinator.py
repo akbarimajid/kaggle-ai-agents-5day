@@ -235,6 +235,27 @@ class AdkCoordinatorTests(unittest.TestCase):
             [],
         )
 
+    def test_with_critic_is_optional_and_does_not_change_prediction(self) -> None:
+        baseline = adk_coordinator.run_adk_incident_analysis("INC-001")
+        with_critic = adk_coordinator.run_adk_incident_analysis(
+            "INC-001",
+            with_critic=True,
+        )
+        self.assertEqual(baseline["prediction"], with_critic["prediction"])
+        self.assertIn("critic_report", with_critic)
+        self.assertTrue(with_critic["critic_report"]["approved"])
+
+    def test_cli_with_critic_attaches_report(self) -> None:
+        buffer = io.StringIO()
+        with redirect_stdout(buffer):
+            code = adk_coordinator.main(
+                ["--incident-id", "INC-001", "--with-critic"]
+            )
+        self.assertEqual(code, 0)
+        payload = json.loads(buffer.getvalue())
+        self.assertIn("critic_report", payload)
+        self.assertTrue(payload["critic_report"]["approved"])
+
 
 if __name__ == "__main__":
     unittest.main()

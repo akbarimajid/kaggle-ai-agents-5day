@@ -135,7 +135,7 @@ PYTHONPATH=app python -m incident_copilot.eval_runner --predictions evals/exampl
 
 * `incident_restatement` as scored field
 * `unsafe_actions_to_avoid` as explicit output (not only via action safety)
-* Loop critic stage before summary (Day 1b stretch pattern)
+* Loop critic stage before summary (implemented — deterministic `critic_refiner.py`)
 * Optional LM-judge layer  -  v0 uses deterministic scoring only
 
 ## Related
