@@ -48,6 +48,7 @@ PYTHONPATH=app python -m incident_copilot.critic_refiner \
 
 See:
 
+* [Manager demo](docs/manager-demo.md) - narrative for technical managers (no commands)
 * [Demo walkthrough](docs/demo-walkthrough.md)
 * [Learning summary](docs/learning-summary.md)
 * [Agent engineering workflow](docs/agent-engineering-workflow.md)
