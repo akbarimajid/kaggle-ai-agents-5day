@@ -168,4 +168,5 @@ versioned.
 * [Demo walkthrough](demo-walkthrough.md)
 * [Agentic engineering playbook](agentic-engineering-playbook.md)
 * [Day 2 tools brief](agentic-engineering-day-2-tools-interoperability.md)
+* [Day 3 agent skills notes](agentic-engineering-day-3-agent-skills-notes.md)
 * [Capstone README](../README.md)

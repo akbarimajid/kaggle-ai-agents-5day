@@ -95,8 +95,9 @@ Versioned agent prompts for the coordinator, specialists, and summary/safety sta
 ## Related docs
 
 * [Agentic engineering playbook](docs/agentic-engineering-playbook.md)
-* [Agentic engineering capstone mapping](docs/agentic-engineering-capstone-mapping.md) - Day 1 and Day 2 theory to design
+* [Agentic engineering capstone mapping](docs/agentic-engineering-capstone-mapping.md) - Day 1 through Day 3 theory to design
 * [Day 2 tools and interoperability](docs/agentic-engineering-day-2-tools-interoperability.md) - concepts and glossary (architecture guidance, not protocol implementation)
+* [Day 3 agent skills notes](docs/agentic-engineering-day-3-agent-skills-notes.md) - concepts and glossary
 
 ## Mock system layers
 
