@@ -2,13 +2,13 @@
 
 ## Demo goal
 
-This document describes a learning capstone for agentic engineering, not production
-incident software. The project simulates production-style incident investigation using
-mock logs, metrics, Kubernetes events, Airflow status, deployment metadata, and runbook
-snippets. It demonstrates safe AI-agent design patterns: bounded tools, structured
-outputs, and verification before autonomy. The capstone prioritizes deterministic
-baselines, output contracts, evals, and review gates before any live model execution or
-production integration.
+This is a local learning capstone for agentic engineering. It is not production incident
+software. The project simulates production-style investigation using mock logs, metrics,
+Kubernetes events, Airflow status, deployment metadata, and runbook snippets. It shows
+how to design an AI incident copilot with bounded tools, structured outputs, and
+verification before autonomy. Deterministic baselines, output contracts, evals, and
+review gates come first. Live model execution and production integration stay optional and
+explicit.
 
 ## One-minute story
 
@@ -21,49 +21,45 @@ output is validated, scored, and reviewed by an offline critic/refiner.
 
 ## Text visual: how it works
 
-```
-+------------------------------+
-| Mock incident bundle          |
-| logs, metrics, k8s events,    |
-| Airflow status, runbooks      |
-+---------------+--------------+
-                |
-                v
-+------------------------------+
-| Deterministic investigator    |
-| parses evidence and produces  |
-| a structured diagnosis        |
-+---------------+--------------+
-                |
-                v
-+------------------------------+
-| Output contract               |
-| checks required fields,       |
-| types, confidence, structure  |
-+---------------+--------------+
-                |
-                v
-+------------------------------+
-| Eval runner                   |
-| checks expected evidence and  |
-| quality against mock cases    |
-+---------------+--------------+
-                |
-                v
-+------------------------------+
-| Offline critic/refiner        |
-| reviews grounding, safety,    |
-| rollback, and next steps      |
-+------------------------------+
-```
+    +------------------------------+
+    | Mock incident bundle          |
+    | logs, metrics, k8s events,    |
+    | Airflow status, runbooks      |
+    +---------------+--------------+
+                    |
+                    v
+    +------------------------------+
+    | Deterministic investigator    |
+    | parses evidence and produces  |
+    | a structured diagnosis        |
+    +---------------+--------------+
+                    |
+                    v
+    +------------------------------+
+    | Output contract               |
+    | checks required fields,       |
+    | types, confidence, structure  |
+    +---------------+--------------+
+                    |
+                    v
+    +------------------------------+
+    | Eval runner                   |
+    | checks expected evidence and  |
+    | quality against mock cases    |
+    +---------------+--------------+
+                    |
+                    v
+    +------------------------------+
+    | Offline critic/refiner        |
+    | reviews grounding, safety,    |
+    | rollback, and next steps      |
+    +------------------------------+
 
-Each stage has a clear responsibility. The investigator turns raw mock evidence into a
-structured response. The contract enforces shape and required fields so outputs stay
-reviewable. Evals compare predictions against golden scenarios so quality does not drift
-silently. The critic/refiner adds a final verification pass for grounding, safety, and
-consistency without taking production actions.
+The investigator turns mock evidence into a structured response. The contract keeps outputs
+reviewable. Evals compare results to golden scenarios so quality does not drift silently.
+The critic/refiner adds a final verification pass without taking production actions.
 
-## Text visual: current demo vs future adaptation
+## Text visual: current capstone vs future adaptation
 
 | Layer | Current capstone | Future real-use adaptation |
 | --- | --- | --- |
@@ -73,8 +69,8 @@ consistency without taking production actions.
 | Safety | Contract, evals, critic/refiner | Policy gates, approvals, audit trail, human-in-the-loop |
 | Actions | No production actions | Start with read-only, then draft-only, then approved actions |
 
-Future adaptation should stay cautious. Real systems would add governance, access
-controls, and human approval long before any automated remediation.
+Future adaptation should stay cautious. Real systems need governance, access controls, and
+human approval long before any automated remediation.
 
 ## What the demo proves
 
@@ -88,16 +84,16 @@ controls, and human approval long before any automated remediation.
 
 ## Why this design matters
 
-Incident response is high risk. Wrong or hallucinated remediation can make outages worse.
-Agents need boundaries: read-only tools, structured outputs, and explicit quality gates.
+Incident response is high risk. Hallucinated remediation can make outages worse. Agents
+need boundaries: read-only tools, structured outputs, and explicit quality gates.
 Structured outputs are easier to validate than free-form chat. Evals and contracts make
-the system reviewable by humans and by automated checks. A safe learning capstone can
-still reflect real engineering tradeoffs without claiming production readiness.
+the system reviewable. A local learning capstone can still reflect real engineering
+tradeoffs without claiming production readiness.
 
 ## How this could adapt to real use cases later
 
-Future adaptation should happen in stages. The capstone does not claim to be ready for
-any of these stages today.
+Adaptation should happen in stages. This capstone does not claim to be ready for any stage
+in a real environment today.
 
 **Stage 1: Read-only assistant**
 
@@ -121,67 +117,62 @@ any of these stages today.
 - Logs all recommendations and decisions
 - Uses stronger evals and policy gates
 
-**Stage 4: Limited approved actions**
+**Stage 4: Limited approved actions with human approval and audit trail**
 
 - Only low-risk actions
 - Only after human approval
-- Only with audit trail
+- Only with a full audit trail
 - Only after strong testing and operational review
 
-This capstone currently stays before Stage 1 in a real environment, or at a local
-simulated Stage 1 with mock data only.
+Today the capstone stays before Stage 1 in a real environment. Locally it simulates
+read-only assistance with mock data only.
 
-## What I would show in a live demo
+## What to walk through in a demo
 
-1. **Mock incident bundle.** Show what evidence looks like: incident metadata, log
-   excerpts, metrics, Kubernetes events, Airflow status, deployment history, and runbook
-   snippets. Emphasize that all data is mock and public-safe.
+Present the capstone as a concept, not as a runbook.
 
-2. **Structured output shape.** Walk through the diagnosis fields: root cause, confidence,
-   evidence citations, clarifying questions, safe next steps, rollback recommendation,
-   and incident summary.
+1. **Incident evidence.** Describe the mock bundle: metadata, logs, metrics, Kubernetes
+   events, Airflow status, deployment history, and runbook snippets. Stress that all
+   data is mock and public-safe.
 
-3. **Validation layer.** Show how the output contract checks required fields, types, and
-   structure before anything is treated as acceptable.
+2. **Structured diagnosis.** Explain the output fields: root cause, confidence, evidence
+   citations, clarifying questions, safe next steps, rollback recommendation, and incident
+   summary.
 
-4. **Eval result.** Show how predictions are scored against golden scenarios across
-   dimensions such as root cause accuracy, evidence quality, and action safety.
+3. **Validation.** Explain how the output contract checks required fields, types, and
+   structure before a response counts as acceptable.
 
-5. **Critic/refiner review.** Show the offline quality gate that reviews grounding,
-   safety, rollback guidance, and consistency without calling live models or mutating
-   infrastructure.
+4. **Scoring.** Explain how results are compared to golden scenarios on root cause,
+   evidence quality, and action safety.
 
-6. **Optional coordinator and specialist boundary.** Explain that the project models a
-   coordinator routing work to domain specialists (Airflow, Kubernetes, logs/metrics,
-   runbooks), but the default acceptance path remains deterministic.
+5. **Review gate.** Explain the offline critic/refiner pass for grounding, safety,
+   rollback guidance, and consistency. No live models and no infrastructure changes.
 
-7. **What is intentionally not automated.** Call out that there is no production
-   remediation, no live cluster access, and no silent fallback to autonomous action.
+6. **Agent topology (optional).** Note that a coordinator can route work to domain
+   specialists, but the default acceptance path stays deterministic.
+
+7. **Boundaries.** State clearly what is not automated: production remediation, live
+   cluster access, and silent autonomous action.
 
 ## Optional agentic boundary
 
-The project includes an ADK-style coordinator and specialist topology, but the default
-quality gate remains deterministic.
+The project models a coordinator and specialist topology, but the default quality gate
+remains deterministic.
 
 Default path:
 
-```
-mock incident -> deterministic investigator -> contract -> eval -> critic/refiner
-```
+    mock incident -> deterministic investigator -> contract -> eval -> critic/refiner
 
 Optional boundary:
 
-```
-coordinator -> specialists -> summary/safety review
-              |
-              v
-       deterministic quality gate remains central
-```
+    coordinator -> specialists -> summary/safety review
+                  |
+                  v
+           deterministic quality gate remains central
 
-The coordinator describes how a future LLM orchestrator could route investigation work.
-Specialists are scoped to one signal domain each. Even when live execution is enabled
-behind an explicit flag, the deterministic baseline and eval score remain the acceptance
-reference.
+The coordinator shows how a future orchestrator could route investigation work.
+Specialists stay scoped to one signal domain each. Any optional live model path still
+defers to the deterministic baseline and eval score for acceptance.
 
 ## What is intentionally out of scope
 
@@ -197,8 +188,8 @@ reference.
 
 **Is this production-ready?**
 
-No. It is a local learning capstone with mock data, deterministic baselines, and
-offline verification. It demonstrates engineering discipline, not on-call readiness.
+No. It is a local learning capstone with mock data, deterministic baselines, and offline
+verification. It demonstrates engineering discipline, not on-call readiness.
 
 **What would be needed before using this with real incidents?**
 
@@ -208,28 +199,25 @@ starting with read-only assistance only.
 
 **Why not connect it directly to logs and Kubernetes?**
 
-Direct production access increases risk before the investigation and safety layers are
-proven. The capstone separates architecture design from integration so contracts, evals,
-and verification can mature first.
+Direct production access adds risk before investigation and safety layers are proven. The
+capstone matures contracts, evals, and verification first, then integration later.
 
 **Why deterministic first?**
 
-Deterministic logic is reproducible, debuggable, and scoreable. It establishes a baseline
-so later model or agent changes can be compared objectively instead of judged by
-impression alone.
+Deterministic logic is reproducible, debuggable, and scoreable. It sets a baseline so
+later model or agent changes can be compared objectively.
 
 **Where would an LLM add value?**
 
-Likely in routing ambiguity, synthesizing narrative summaries, proposing clarifying
-questions, and drafting handoff notes, always within contract-shaped outputs and under
-human review. The capstone models that boundary without making live models the default
-gate.
+In routing ambiguity, synthesizing summaries, proposing clarifying questions, and drafting
+handoff notes, always within contract-shaped outputs and under human review. Live models
+are optional here, not the default gate.
 
 **How do we prevent unsafe recommendations?**
 
-Through structured outputs, evals that penalize unsafe actions, a critic/refiner
-verification stage, read-only tools, no default production actions, and explicit human
-approval for anything beyond drafts.
+Structured outputs, evals that penalize unsafe actions, a critic/refiner verification
+stage, read-only tools, no default production actions, and explicit human approval for
+anything beyond drafts.
 
 **What is the smallest useful real-world version?**
 
