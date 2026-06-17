@@ -1,7 +1,7 @@
 # Agentic Engineering theory -> Incident Copilot mapping
 
 How concepts from *The New SDLC With Vibe Coding* map to the **AI Platform Incident
-Copilot** capstone and portfolio goals.
+Copilot** capstone and learning goals.
 
 ## Mapping table
 
@@ -47,15 +47,6 @@ Orchestrator mode        ->     IncidentCoordinatorAgent (future ADK)
 Factory model            ->     Sequential reporting pipeline
 Guardrails               ->     Read-only tools + unsafe action scoring
 ```
-
-## Related docs
-
-* [output-contract.md](./output-contract.md) - response fields and eval mapping
-* [architecture.md](./architecture.md) - multi-agent design
-* [Day 2 tools brief](./agentic-engineering-day-2-tools-interoperability.md) - concepts and glossary
-* [notes/day-1-new-sdlc-summary.md](../../notes/day-1-new-sdlc-summary.md) - Day 1 concepts
-* [notes/day-1b-agent-architectures.md](../../notes/day-1b-agent-architectures.md) - ADK
-  workflow patterns
 
 ## Optional Mermaid: evidence pipeline
 
@@ -147,3 +138,37 @@ Out of scope for v0:
 3. Runtime agent registries.
 4. Agent-generated executable UI.
 5. Autonomous purchases, payments, SaaS upgrades, or cloud quota increases.
+
+## Day 3 theory -> Incident Copilot mapping
+
+Day 3 adds the agent skills lens. In this capstone, skills are treated as reusable
+procedural knowledge, not as a new runtime feature.
+
+| Day 3 idea | Capstone design decision | Learning value |
+| --- | --- | --- |
+| **Agent skill as reusable procedural knowledge** | Deterministic manual investigator and versioned prompt templates | Repeated incident work should be small, reviewable, and testable |
+| **Progressive disclosure** | Specialist prompts, docs, and contracts are separated | Avoid one giant prompt and reduce context rot |
+| **Skill description as routing signal** | ADK coordinator and specialist boundaries | Routing should be explicit and bounded |
+| **Skills vs tools** | Deterministic code handles parsing, validation, and scoring | Keep precise work in scripts, not prompts |
+| **Skills vs AGENTS.md** | `AGENTS.md` stays global repo guidance | Task-specific procedures should not pollute always-loaded context |
+| **Evaluation failure modes** | Eval runner, contract validator, critic/refiner | Trigger, execution, token budget, and regression risks need gates |
+| **Output vs trajectory evaluation** | Critic/refiner plus eval runner | Judge both final answer quality and process safety when tools are involved |
+| **Read-only/draft-only/action-allowed ladder** | Offline-safe defaults and explicit live-adk flag | Keep the capstone safe and non-remediating |
+| **Meta-skills** | Not implemented | Do not add self-improving skill generation without stronger evals and human review |
+
+## Day 3 design stance
+
+The Day 3 skills paper improves the vocabulary for explaining the capstone. It does not
+require a skills runtime. The current PR should remain documentation-only. Do not add
+`.agents/skills`, `SKILL.md` packages, MCP, live integrations, new dependencies, or
+autonomous remediation.
+
+## Related docs
+
+* [output-contract.md](./output-contract.md) - response fields and eval mapping
+* [architecture.md](./architecture.md) - multi-agent design
+* [Day 2 tools brief](./agentic-engineering-day-2-tools-interoperability.md) - concepts and glossary
+* [Day 3 agent skills notes](./agentic-engineering-day-3-agent-skills-notes.md) - concepts and glossary
+* [notes/day-1-new-sdlc-summary.md](../../notes/day-1-new-sdlc-summary.md) - Day 1 concepts
+* [notes/day-1b-agent-architectures.md](../../notes/day-1b-agent-architectures.md) - ADK
+  workflow patterns
