@@ -1,4 +1,4 @@
-# Manager Demo: AI Platform Incident Copilot
+# Incident Copilot Demo
 
 ## Demo goal
 
@@ -184,7 +184,7 @@ defers to the deterministic baseline and eval score for acceptance.
 - No unsupported production-readiness claims
 - No dependency or deployment expansion for this demo
 
-## Expected manager questions
+## Expected questions
 
 **Is this production-ready?**
 

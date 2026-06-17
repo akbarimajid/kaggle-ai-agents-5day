@@ -165,7 +165,7 @@ versioned.
 
 ## Related docs
 
-* [Manager demo](manager-demo.md) - narrative for technical managers (no commands)
+* [Incident Copilot demo](incident-copilot-demo.md) - conceptual demo narrative (no commands)
 * [Demo walkthrough](demo-walkthrough.md)
 * [Agentic engineering playbook](agentic-engineering-playbook.md)
 * [Day 2 tools brief](agentic-engineering-day-2-tools-interoperability.md)
